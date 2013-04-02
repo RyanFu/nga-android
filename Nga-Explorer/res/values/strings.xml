@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">大漩涡</string>
+    <string name="login">登陆</string>
+    <string name="account_hint">用户名</string>
+    <string name="pwd_hint">密码</string>
+    <string name="back">返回</string>
+    <string name="exit_hint">再按一次退出</string>
+
+    <!-- bottom bar -->
+    <string name="refresh">刷新</string>
+    <string name="new_post">发帖</string>
+    <string name="reply">回帖</string>
+    <string name="personal">个人中心</string>
+    <string name="setting">设置</string>
+
+</resources>

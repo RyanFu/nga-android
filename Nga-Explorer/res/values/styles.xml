@@ -1,0 +1,55 @@
+<resources>
+
+    <style name="editbox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:background">@drawable/login_editbox</item>
+        <item name="android:textSize">15.0sp</item>
+    </style>
+
+    <style name="backBtn">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@drawable/bar_back</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">14.0sp</item>
+    </style>
+
+    <style name="bottom_bar_btn">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">@drawable/text_blue_selector_color</item>
+        <item name="android:background">@drawable/tabs_btn_bg</item>
+        <item name="android:paddingTop">7.0dip</item>
+        <item name="android:paddingBottom">4.0dip</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_marginTop">0.0dip</item>
+        <item name="android:layout_marginBottom">0.0dip</item>
+        <item name="android:button">@null</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <!-- Topic List Font Style -->
+    <style name="smallfont" parent="@android:style/TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="smallfont.blue">
+        <item name="android:textColor">#ff121C46</item>
+    </style>
+
+    <style name="smallfont.gray">
+        <item name="android:textColor">#ff727272</item>
+    </style>
+
+</resources>

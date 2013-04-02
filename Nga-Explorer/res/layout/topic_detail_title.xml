@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_top_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="45dp"
+    android:layout_alignParentTop="true"
+    android:background="@drawable/title_bg" >
+
+    <Button
+        android:id="@+id/detail_btn_back"
+        style="@style/backBtn"
+        android:onClick="back" />
+
+    <TextView
+        android:id="@+id/topic_detail_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/detail_btn_back"
+        android:layout_alignBottom="@+id/detail_btn_back"
+        android:layout_toLeftOf="@+id/detail_more"
+        android:layout_toRightOf="@+id/detail_btn_back"
+        android:singleLine="true"
+        android:text="awad"
+        android:textColor="#ffffff"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/detail_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bar_more"
+        android:textColor="#fff" />
+
+</RelativeLayout>

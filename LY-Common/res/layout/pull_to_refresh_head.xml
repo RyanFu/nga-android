@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/head_contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/head_tipsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pull_to_refresh_pull_label"
+                android:textColor="@color/pull_down_text_color" />
+
+            <TextView
+                android:id="@+id/head_lastUpdatedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="更新于:03-25 13:48"
+                android:textColor="@color/pull_down_text_color" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/head_arrowImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/head_tipsTextView"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="35.0dip"
+            android:src="@drawable/arrow_down" />
+
+        <ProgressBar
+            android:id="@+id/head_progressBar"
+            style="@style/weibo_progressbar"
+            android:layout_alignLeft="@id/head_tipsTextView"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="22.0dip"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+</LinearLayout>

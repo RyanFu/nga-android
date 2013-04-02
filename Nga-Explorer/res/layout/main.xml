@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/shit1"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/title_bg" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/app_name"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/search_btn"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/tabs_btn_bg"
+            android:onClick="search"
+            android:src="@drawable/ic_search" />
+    </RelativeLayout>
+
+    <com.yulingtech.lycommon.ui.PullToRefreshListView
+        android:id="@+id/topic_listview"
+        style="@style/widget_listview" />
+
+    <LinearLayout
+        android:id="@+id/bottom_bar_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_bar"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingBottom="1.0dip"
+        android:paddingTop="1.0dip" >
+
+        <Button
+            android:id="@+id/bt_refresh"
+            style="@style/bottom_bar_btn"
+            android:drawableTop="@drawable/bottom_btn_refresh"
+            android:onClick="refresh"
+            android:text="@string/refresh" />
+
+        <Button
+            android:id="@+id/btn_newpost"
+            style="@style/bottom_bar_btn"
+            android:drawableTop="@drawable/bottom_btn_newpost"
+            android:onClick="newPost"
+            android:text="@string/new_post" />
+
+        <Button
+            android:id="@+id/btn_personal"
+            style="@style/bottom_bar_btn"
+            android:drawableTop="@drawable/bottom_btn_personal"
+            android:onClick="personal"
+            android:text="@string/personal" />
+
+        <Button
+            android:id="@+id/btn_setting"
+            style="@style/bottom_bar_btn"
+            android:drawableTop="@drawable/bottom_btn_setting"
+            android:onClick="setting"
+            android:text="@string/setting" />
+    </LinearLayout>
+
+</LinearLayout>

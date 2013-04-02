@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- NGA Explorer -->
+    <!-- Theme Shit -->
+    <color name="shit1">#FFF8E5</color>
+    <color name="shit2">#fef3d1</color>
+    <color name="shit3">#FFF5D7</color>
+    <color name="shit4">#FEB</color>
+    <color name="shit5">#551200</color> <!-- 深棕色 -->
+    <color name="holo_blue_light">#ff33b5e5</color>
+    <color name="nga_textblue">#ff121C46</color>
+    <color name="transparent">#00000000</color>
+</resources>

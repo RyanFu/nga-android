@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 提示信息 -->
+<resources>
+
+    <!-- 异常提示信息 -->
+    <string name="network_not_connected">网络连接失败，请检查网络设置</string>
+    <string name="io_exception_error">文件流异常</string>
+    <string name="http_status_code_error">网络异常，错误码：%d</string>
+    <string name="http_exception_error">网络异常，请求超时</string>
+    <string name="socket_exception_error">网络异常，读取数据超时</string>
+    <string name="app_run_code_error">应用程序运行时异常</string>
+    <string name="app_json_error">json解析错误</string>
+
+    <!-- 发送异常信息到服务器 -->
+    <string name="app_error">应用程序错误</string>
+    <string name="app_error_message">应用程序出现错误，即将退出。如果你有邮件客户端，请提交报告给我。</string>
+    <string name="submit_report">提交报告</string>
+    <string name="app_menu_surelogout">确定退出程序吗？</string>
+    <string name="sure">确定</string>
+    <string name="cancle">取消</string>
+
+    <!-- 登陆 -->
+    <string name="msg_login_account_null">用户名不能为空</string>
+    <string name="msg_login_pwd_null">密码不能为空</string>
+    <string name="msg_login_success">登陆成功！</string>
+    <string name="msg_login_failure">用户名或密码错误</string>
+
+    <!-- PullToRefresh提示信息 -->
+    <string name="load_error">加载数据出错</string>
+    <string name="load_more">更多</string>
+    <string name="load_ing">加载中···</string>
+    <string name="load_full">已加载全部</string>
+    <string name="load_empty">暂无数据</string>
+
+</resources>

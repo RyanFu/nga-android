@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/topic_detail_popup_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/topic_detail_popout"
+    android:gravity="center"
+    android:minHeight="58dp"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/support"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/biz_tie_comment_tool_support"
+        android:gravity="center"
+        android:minWidth="58dp"
+        android:text="喷他"
+        android:textColor="#eee"
+        android:onClick="atPost"
+        android:clickable="true" />
+
+    <TextView
+        android:id="@+id/support"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/biz_tie_comment_tool_support"
+        android:gravity="center"
+        android:minWidth="58dp"
+        android:text="引用"
+        android:textColor="#eee"
+        android:clickable="true" />
+
+    <TextView
+        android:id="@+id/support"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/biz_tie_comment_tool_support"
+        android:gravity="center"
+        android:minWidth="58dp"
+        android:text="回复"
+        android:textColor="#eee"
+        android:clickable="true" />
+
+    <TextView
+        android:id="@+id/support"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/biz_tie_comment_tool_support"
+        android:gravity="center"
+        android:minWidth="58dp"
+        android:text="复制"
+        android:textColor="#eee"
+        android:clickable="true" />
+
+    <TextView
+        android:id="@+id/support"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/biz_tie_comment_tool_support"
+        android:gravity="center"
+        android:minWidth="58dp"
+        android:text="截图"
+        android:textColor="#eee"
+        android:clickable="true" />
+
+</LinearLayout>

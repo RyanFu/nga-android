@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/title" />
+
+    <ListView
+        android:id="@+id/account_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#fff1f1f1"
+        android:cacheColorHint="@color/transparent"
+        android:dividerHeight="2.0dip"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="3.0dip"
+        android:padding="0.0px"
+        android:smoothScrollbar="true" />
+
+</LinearLayout>

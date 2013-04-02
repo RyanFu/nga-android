@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff1f1f1"
+    android:orientation="vertical" >
+
+    <include layout="@layout/title" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/title_browse" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/quality_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4.0dip"
+                android:layout_marginRight="4.0dip"
+                android:layout_marginTop="10.0dip"
+                android:singleLine="true"
+                android:text="正文图片"
+                android:textColor="#ff3b3b3b"
+                android:textSize="14.0sp" />
+
+            <RadioGroup
+                android:id="@+id/radio_group_image"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4.0dip"
+                android:layout_marginRight="4.0dip"
+                android:layout_marginTop="10.0dip"
+                android:background="@drawable/setting_all"
+                android:gravity="center_vertical" >
+
+                <RadioButton
+                    android:id="@+id/image_op0"
+                    android:layout_width="fill_parent"
+                    android:layout_height="38.0dip"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingBottom="6.0dip"
+                    android:paddingLeft="15.0dip"
+                    android:paddingRight="10.0dip"
+                    android:paddingTop="6.0dip"
+                    android:text="从不加载图片"
+                    android:textColor="#ff3b3b3b"
+                    android:textSize="14.0sp" />
+
+                <RadioButton
+                    android:id="@+id/image_op1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="38.0dip"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingBottom="6.0dip"
+                    android:paddingLeft="15.0dip"
+                    android:paddingRight="10.0dip"
+                    android:paddingTop="6.0dip"
+                    android:text="WIFI下加载图片(2G,3G环境不加载)"
+                    android:textColor="#ff3b3b3b"
+                    android:textSize="14.0sp" />
+
+                <RadioButton
+                    android:id="@+id/image_op2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="38.0dip"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingBottom="6.0dip"
+                    android:paddingLeft="15.0dip"
+                    android:paddingRight="10.0dip"
+                    android:paddingTop="6.0dip"
+                    android:text="始终加载图片"
+                    android:textColor="#ff3b3b3b"
+                    android:textSize="14.0sp" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/quality_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4.0dip"
+                android:layout_marginRight="4.0dip"
+                android:layout_marginTop="10.0dip"
+                android:singleLine="true"
+                android:text="正文字体大小"
+                android:textColor="#ff3b3b3b"
+                android:textSize="14.0sp" />
+
+            <RadioGroup
+                android:id="@+id/radio_group_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4.0dip"
+                android:layout_marginRight="4.0dip"
+                android:layout_marginTop="10.0dip"
+                android:background="@drawable/setting_all"
+                android:gravity="center_vertical" >
+
+                <RadioButton
+                    android:id="@+id/font_large"
+                    android:layout_width="fill_parent"
+                    android:layout_height="38.0dip"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingBottom="6.0dip"
+                    android:paddingLeft="15.0dip"
+                    android:paddingRight="10.0dip"
+                    android:paddingTop="6.0dip"
+                    android:text="大"
+                    android:textColor="#ff3b3b3b"
+                    android:textSize="14.0sp" />
+
+                <RadioButton
+                    android:id="@+id/font_medium"
+                    android:layout_width="fill_parent"
+                    android:layout_height="38.0dip"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingBottom="6.0dip"
+                    android:paddingLeft="15.0dip"
+                    android:paddingRight="10.0dip"
+                    android:paddingTop="6.0dip"
+                    android:text="中"
+                    android:textColor="#ff3b3b3b"
+                    android:textSize="14.0sp" />
+
+                <RadioButton
+                    android:id="@+id/font_small"
+                    android:layout_width="fill_parent"
+                    android:layout_height="38.0dip"
+                    android:button="@null"
+                    android:drawableRight="@android:drawable/btn_radio"
+                    android:paddingBottom="6.0dip"
+                    android:paddingLeft="15.0dip"
+                    android:paddingRight="10.0dip"
+                    android:paddingTop="6.0dip"
+                    android:text="小"
+                    android:textColor="#ff3b3b3b"
+                    android:textSize="14.0sp" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/abstract_selection"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4.0dip"
+                android:layout_marginRight="4.0dip"
+                android:layout_marginTop="10.0dip"
+                android:background="@drawable/setting_all"
+                android:onClick="avatar_show"
+                android:clickable="true"
+                android:focusable="true" >
+
+                <TextView
+                    android:id="@+id/abstract_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="8.0dip"
+                    android:layout_marginLeft="10.0dip"
+                    android:layout_marginTop="8.0dip"
+                    android:layout_weight="1.0"
+                    android:singleLine="true"
+                    android:text="正文头像显示"
+                    android:textColor="#ff3b3b3b"
+                    android:textSize="14.0sp" />
+
+                <TextView
+                    android:id="@+id/avatar_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10.0dip"
+                    android:singleLine="true"
+                    android:text="关"
+                    android:textColor="#ff3b3b3b"
+                    android:textSize="14.0sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!-- share items -->
+    <string-array name="switch_onoff">
+	    <item>开</item>
+	    <item>关</item>
+    </string-array>
+</resources>
