@@ -25,7 +25,7 @@
                 android:layout_marginRight="4.0dip"
                 android:layout_marginTop="10.0dip"
                 android:singleLine="true"
-                android:text="正文图片"
+                android:text="正文图片\头像"
                 android:textColor="#ff3b3b3b"
                 android:textSize="14.0sp" />
 

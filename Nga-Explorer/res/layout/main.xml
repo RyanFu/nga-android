@@ -30,7 +30,7 @@
             android:src="@drawable/ic_search" />
     </RelativeLayout>
 
-    <com.yulingtech.lycommon.ui.PullToRefreshListView
+    <com.yulingtech.lycommon.widget.PullToRefreshListView
         android:id="@+id/topic_listview"
         style="@style/widget_listview" />
 

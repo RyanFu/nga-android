@@ -1,4 +1,4 @@
-package com.yulingtech.lycommon.ui;
+package com.yulingtech.lycommon.widget;
 
 import android.app.Dialog;
 import android.content.Context;

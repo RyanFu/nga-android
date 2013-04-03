@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants" >
+
+    <TextView
+        android:id="@+id/topic_floor_author"
+        android:layout_width="70dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textIsSelectable="false"
+        android:textStyle="bold" >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/topic_floor_avatar"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/topic_floor_author"
+        android:layout_below="@+id/topic_floor_author"
+        android:clickable="false"
+        android:focusable="false"
+        android:longClickable="false"
+        android:src="@drawable/default_avatar" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/topic_floor_aurvrc"
+        style="@style/smallfont.gray"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/topic_floor_avatar"
+        android:textIsSelectable="false"
+        android:text="威望:1" />
+
+    <TextView
+        android:id="@+id/topic_floor_postnum"
+        style="@style/smallfont.gray"
+        android:layout_alignParentLeft="true"
+        android:textIsSelectable="false"
+        android:layout_below="@+id/topic_floor_aurvrc"
+        android:text="发帖:523" />
+
+    <WebView
+        android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topic_floor_author"
+        android:layout_toRightOf="@id/topic_floor_avatar"
+        android:scrollbars="none" />
+
+    <TextView
+        android:id="@+id/postdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/topic_floor_author"
+        android:layout_toRightOf="@+id/topic_floor_author"
+        android:text="[0楼]"
+        android:textIsSelectable="false" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/floor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/floor"
+        android:text="2013-02-14 22:22"
+        android:textIsSelectable="false" >
+    </TextView>
+
+</RelativeLayout>

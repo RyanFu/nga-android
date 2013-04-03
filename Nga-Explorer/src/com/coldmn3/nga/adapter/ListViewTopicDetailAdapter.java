@@ -32,8 +32,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.coldmn3.nga.R;
+import com.coldmn3.nga.api.NgaApi;
 import com.coldmn3.nga.app.AppContext;
+import com.coldmn3.nga.app.AppException;
 import com.coldmn3.nga.bean.TopicFloor;
+import com.yulingtech.lycommon.util.AsyncImageDownload;
+import com.yulingtech.lycommon.util.BitmapManager;
+import com.yulingtech.lycommon.util.StringUtils;
 import com.yulingtech.lycommon.util.ULog;
 
 public class ListViewTopicDetailAdapter extends BaseAdapter {
@@ -48,6 +53,8 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 	float touchX;
 	float touchY;
 	final float density;
+
+	private BitmapManager bitmapManager;
 
 	private static SparseArray<SoftReference<View>> cache;
 
@@ -70,6 +77,7 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 
 		appContext = (AppContext) ((Activity) context).getApplication();
 		cache = new SparseArray<SoftReference<View>>();
+		bitmapManager = new BitmapManager(BitmapFactory.decodeResource(context.getResources(), R.drawable.default_avatar));
 	}
 
 	@Override
@@ -90,6 +98,32 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
+//		TopicFloor detail = listData.get(position);
+//		ViewHolder viewHolder = null;
+//		if (convertView == null) {
+//			viewHolder = new ViewHolder();
+//			convertView = inflater.inflate(R.layout.relative_aritclelist, parent, false);
+//
+//			viewHolder.author = (TextView) convertView.findViewById(R.id.topic_floor_author);
+//			viewHolder.content = (WebView) convertView.findViewById(R.id.content);
+//			viewHolder.floor = (TextView) convertView.findViewById(R.id.floor);
+//			viewHolder.postdate = (TextView) convertView.findViewById(R.id.postdate);
+//			viewHolder.avatar = (ImageView) convertView.findViewById(R.id.topic_floor_avatar);
+//			viewHolder.postnum = (TextView) convertView.findViewById(R.id.topic_floor_postnum);
+//			viewHolder.aurvrc = (TextView) convertView.findViewById(R.id.topic_floor_aurvrc);
+//			convertView.setTag(viewHolder);
+//		} else {
+//			viewHolder = (ViewHolder) convertView.getTag();
+//		}
+//		handleAvatar(viewHolder, detail.getJs_escap_avatar(), true);
+//		viewHolder.author.setText(detail.getAuthor());
+//		viewHolder.floor.setText("[" + detail.getLou() + "楼]");
+//		viewHolder.postdate.setText(detail.getPostdate());
+//		viewHolder.aurvrc.setText("威望:" + detail.getAurvrc());
+//		viewHolder.postnum.setText("发帖:" + detail.getPostnum());
+//
+//		viewHolder.content.loadDataWithBaseURL(" fake", detail.getContent(), "text/html", "utf-8", null);
+		
 		ViewHolder viewHolder = null;
 
 		SoftReference<View> ref = cache.get(position);
@@ -100,7 +134,7 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.topic_flooritem, parent, false);
+			convertView = inflater.inflate(R.layout.topic_flooritem_1, parent, false);
 
 			viewHolder.author = (TextView) convertView.findViewById(R.id.topic_floor_author);
 			viewHolder.content = (WebView) convertView.findViewById(R.id.content);
@@ -127,13 +161,24 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 		// setting.setBlockNetworkImage(!showImage);
 		// setting.setDefaultFontSize(PhoneConfiguration.getInstance().getWebSize());
 		setting.setJavaScriptEnabled(false);
+		setting.setBuiltInZoomControls(true);
+		setting.setJavaScriptEnabled(false);
+		setting.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
+		setting.setRenderPriority(RenderPriority.HIGH);
+
 		int picOp = appContext.getFloorPictureOption();
+		boolean net = false;
 		if (picOp == 2 || (picOp == 1 && appContext.getNetworkType() == AppContext.NETTYPE_WIFI)) {
 			setting.setBlockNetworkImage(false);
+			net = true;
 		} else {
 			setting.setBlockNetworkImage(true);
+			net = false;
 		}
 		viewHolder.position = position;
+
+		String url = detail.getJs_escap_avatar();
+		handleAvatar(viewHolder, url, net); // 头像
 
 		String content = detail.getContent();
 		String subject = detail.getSubject();
@@ -147,24 +192,14 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 		viewHolder.content.loadDataWithBaseURL(" fake", "loading", "text/html", "utf-8", null);
 
 		// viewHolder.content.refreshDrawableState();
-		viewHolder.content.clearView();
-		viewHolder.content.loadDataWithBaseURL(null, detail.getContent(), "text/html", "utf-8", null);
+		// viewHolder.content.clearView();
+		viewHolder.content.loadDataWithBaseURL(" fake", detail.getContent(), "text/html", "utf-8", null);
 		// handleFloorContent(viewHolder.content, content, false);
 		viewHolder.author.setText(detail.getAuthor());
 		viewHolder.floor.setText("[" + detail.getLou() + "楼]");
 		viewHolder.postdate.setText(detail.getPostdate());
 		viewHolder.aurvrc.setText("威望:" + detail.getAurvrc());
 		viewHolder.postnum.setText("发帖:" + detail.getPostnum());
-
-		try {
-			Thread.sleep(5);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		if (appContext.isShowAvatar()) {
-			handlAvatar(parseAvatarUrl(detail.getJs_escap_avatar()), viewHolder.avatar);
-		}
 
 		View left = convertView.findViewById(R.id.floor_left);
 		left.setOnTouchListener(new OnTouchListener() {
@@ -203,6 +238,31 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+	private void handleAvatar(ViewHolder viewHolder, String url, boolean net) {
+		if (appContext.isShowAvatar()) {
+			viewHolder.avatar.setVisibility(View.VISIBLE);
+			if (!StringUtils.isEmpty(url)) {
+				bitmapManager.loadBitmap(net, "/_Nga/avatar/", url, viewHolder.avatar, new AsyncImageDownload() {
+
+					@Override
+					public Bitmap onDownload(String url) {
+
+						try {
+							return NgaApi.getNetBitmap(url);
+						} catch (AppException e) {
+							e.printStackTrace();
+						}
+						return null;
+					}
+				});
+			} else {
+				viewHolder.avatar.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.default_avatar));
+//				viewHolder.avatar.setVisibility(View.GONE);
+			}
+		} else {
+			viewHolder.avatar.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.default_trans));
+		}
+	}
 
 	private void handleFloorContent(final WebView contentView, final String content, final boolean b) {
 		WebSettings webSettings = contentView.getSettings();

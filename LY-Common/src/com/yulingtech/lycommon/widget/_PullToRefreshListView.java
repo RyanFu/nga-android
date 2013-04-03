@@ -1,4 +1,4 @@
-package com.yulingtech.lycommon.ui;
+package com.yulingtech.lycommon.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

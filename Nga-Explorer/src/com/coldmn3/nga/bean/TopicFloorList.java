@@ -11,6 +11,7 @@ import android.text.Html;
 import com.coldmn3.nga.api.NgaUtils;
 import com.coldmn3.nga.app.AppException;
 import com.yulingtech.lycommon.util.AndroidUtils;
+import com.yulingtech.lycommon.util.StringUtils;
 import com.yulingtech.lycommon.util.ULog;
 
 public class TopicFloorList {
@@ -18,7 +19,17 @@ public class TopicFloorList {
 
 	private String errorMsg;
 
+	private String quote_from;
+
 	private List<TopicFloor> topicDetailList = new ArrayList<TopicFloor>();
+
+	public String getQuote_from() {
+		return quote_from;
+	}
+
+	public void setQuote_from(String quote_from) {
+		this.quote_from = quote_from;
+	}
 
 	public String getErrorMsg() {
 		return errorMsg;
@@ -75,6 +86,18 @@ public class TopicFloorList {
 				return topicDetailList;
 			}
 
+			// 判断是否是镜像帖子
+			JSONObject _TObject = dataObject.getJSONObject("__T");
+			if (_TObject != null) {
+				if (_TObject.has("quote_from")) {
+					String quote = _TObject.getString("quote_from");
+					if (!quote.equals("0")) {
+						topicDetailList.setQuote_from(quote);
+						return topicDetailList;
+					}
+				}
+			}
+
 			JSONObject topicsObject = dataObject.getJSONObject("__R");
 			if (topicsObject == null) {
 				String error = dataObject.getString("__MESSAGE");
@@ -99,6 +122,8 @@ public class TopicFloorList {
 						topicFloor.setAuthor(topicObject.getString("author"));
 						topicFloor.setLou(topicObject.getString("lou"));
 						topicFloor.setPostdate(topicObject.getString("postdate"));
+					} else if (topicObject.has("")) {
+
 					} else {
 						topicFloor.setAuthor(topicObject.getString("author"));
 						topicFloor.setContent(NgaUtils.parseContent(topicObject.getString("content")));
@@ -106,8 +131,9 @@ public class TopicFloorList {
 						topicFloor.setPostnum(topicObject.getString("postnum"));
 						topicFloor.setAurvrc(topicObject.getString("aurvrc"));
 						topicFloor.setLou(topicObject.getString("lou"));
+						ULog.i("unparse url:", topicFloor.getLou() + " " + topicObject.getString("js_escap_avatar"));
 						topicFloor.setJs_escap_avatar(NgaUtils.parseAvatarUrl(topicObject.getString("js_escap_avatar")));
-						ULog.i("avatar url:", topicFloor.getJs_escap_avatar());
+						ULog.i("avatar url:", topicFloor.getLou() + " " + topicFloor.getJs_escap_avatar());
 					}
 
 					list.add(topicFloor);

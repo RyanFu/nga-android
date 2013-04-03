@@ -25,11 +25,11 @@ import com.coldmn3.nga.app.AppException;
 import com.coldmn3.nga.bean.Topic;
 import com.coldmn3.nga.bean.TopicList;
 import com.coldmn3.nga.common.Constants;
-import com.yulingtech.lycommon.ui.PullToRefreshListView;
-import com.yulingtech.lycommon.ui.PullToRefreshListView.OnRefreshListener;
 import com.yulingtech.lycommon.util.AndroidUtils;
 import com.yulingtech.lycommon.util.StringUtils;
 import com.yulingtech.lycommon.util.ULog;
+import com.yulingtech.lycommon.widget.PullToRefreshListView;
+import com.yulingtech.lycommon.widget.PullToRefreshListView.OnRefreshListener;
 
 public class Main extends BaseActivity {
 

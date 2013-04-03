@@ -42,15 +42,15 @@ public class TopicDetail extends FragmentActivity {
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPager.setAdapter(mAdapter);
 
-		TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-		mIndicator = indicator;
-		mIndicator.setViewPager(mPager);
-		final float density = getResources().getDisplayMetrics().density;
-		indicator.setFooterIndicatorHeight(1 * density);
-		indicator.setBackgroundColor(0xFF313131);
-		indicator.setFooterColor(0xFF313131);
-		indicator.setSelectedColor(this.getResources().getColor(R.color.holo_blue_light));
-		indicator.setTextSize(14 * density);
+//		TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
+//		mIndicator = indicator;
+//		mIndicator.setViewPager(mPager);
+//		final float density = getResources().getDisplayMetrics().density;
+//		indicator.setFooterIndicatorHeight(1 * density);
+//		indicator.setBackgroundColor(0xFF313131);
+//		indicator.setFooterColor(0xFF313131);
+//		indicator.setSelectedColor(this.getResources().getColor(R.color.holo_blue_light));
+//		indicator.setTextSize(14 * density);
 
 	}
 

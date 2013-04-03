@@ -3,6 +3,7 @@ package com.coldmn3.nga.api;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -20,6 +22,9 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.http.client.params.ClientPNames;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.coldmn3.nga.app.AppContext;
 import com.coldmn3.nga.app.AppException;
@@ -141,7 +146,19 @@ public class NgaApi {
 		params.put("Accept-Charset", "GBK");
 
 		try {
-			return TopicFloorList.parse(post(appContext, url, params, null, null));
+			final TopicFloorList topicFloorList = TopicFloorList.parse(post(appContext, url, params, null, null));
+			final String quote = topicFloorList.getQuote_from();
+			if (!StringUtils.isEmpty(quote)) {
+				url = _MakeURL(URLs.READ_PHP, new HashMap<String, Object>() {
+					{
+						put("page", page);
+						put("tid", quote);
+					}
+				});
+				ULog.i(LOG_TAG + " getTopicDetailList", "quote from:" + quote + " redirect to :" + url);
+				return TopicFloorList.parse(post(appContext, url, params, null, null));
+			}
+			return topicFloorList;
 		} catch (AppException e) {
 			if (e instanceof AppException) {
 				throw (AppException) e;
@@ -298,6 +315,64 @@ public class NgaApi {
 		} while (time < RETRY_TIME);
 
 		return responseBody;
+	}
+
+	/**
+	 * 获取网络图片
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static Bitmap getNetBitmap(String url) throws AppException {
+		// System.out.println("image_url==> "+url);
+		HttpClient httpClient = null;
+		GetMethod httpGet = null;
+		Bitmap bitmap = null;
+		int time = 0;
+		do {
+			try {
+				httpClient = getHttpClient();
+				httpGet = getHttpGet(url, null, null);
+				int statusCode = httpClient.executeMethod(httpGet);
+				if (statusCode != HttpStatus.SC_OK) {
+					ULog.e("error url", " " + url);
+					throw AppException.http(statusCode);
+				}
+				InputStream inStream = httpGet.getResponseBodyAsStream();
+				bitmap = BitmapFactory.decodeStream(inStream);
+				inStream.close();
+				break;
+			} catch (HttpException e) {
+				time++;
+				if (time < RETRY_TIME) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+					}
+					continue;
+				}
+				// 发生致命的异常，可能是协议不对或者返回的内容有问题
+				e.printStackTrace();
+				throw AppException.http(e);
+			} catch (IOException e) {
+				time++;
+				if (time < RETRY_TIME) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+					}
+					continue;
+				}
+				// 发生网络异常
+				e.printStackTrace();
+				throw AppException.network(e);
+			} finally {
+				// 释放连接
+				httpGet.releaseConnection();
+				httpClient = null;
+			}
+		} while (time < RETRY_TIME);
+		return bitmap;
 	}
 
 	private static String _MakeURL(String p_url, Map<String, Object> params) {

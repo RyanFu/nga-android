@@ -16,10 +16,10 @@ import com.coldmn3.nga.R;
 import com.coldmn3.nga.app.AppContext;
 import com.coldmn3.nga.app.AppException;
 import com.coldmn3.nga.bean.User;
-import com.yulingtech.lycommon.ui.ZakerProgressDialog;
 import com.yulingtech.lycommon.util.AndroidUtils;
 import com.yulingtech.lycommon.util.StringUtils;
 import com.yulingtech.lycommon.util.ULog;
+import com.yulingtech.lycommon.widget.ZakerProgressDialog;
 
 /**
  * 登陆Activity
