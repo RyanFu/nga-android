@@ -10,8 +10,6 @@ import android.text.Html;
 
 import com.coldmn3.nga.api.NgaUtils;
 import com.coldmn3.nga.app.AppException;
-import com.yulingtech.lycommon.util.AndroidUtils;
-import com.yulingtech.lycommon.util.StringUtils;
 import com.yulingtech.lycommon.util.ULog;
 
 public class TopicFloorList {

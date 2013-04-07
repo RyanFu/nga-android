@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/shit1" >
 
-    <ListView
+    <com.yulingtech.lycommon.widget.OverScrollListView
         android:id="@id/android:list"
         style="@style/widget_listview"
         android:layout_width="fill_parent"
@@ -17,15 +17,62 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="加载中...">
+        android:text="加载中..." >
     </TextView>
 
-    <!--
+    <com.yulingtech.lycommon.widget.InOutRelativeLayout
+        android:id="@+id/composer_buttons_wrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:clipChildren="false"
+        android:clipToPadding="false" >
+
+        <com.yulingtech.lycommon.widget.InOutImageButton
+            android:id="@+id/composer_button_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="8.666666666666667dp"
+            android:layout_marginLeft="77dp"
+            android:background="@drawable/composer_camera"
+            android:visibility="gone" />
+
+        <com.yulingtech.lycommon.widget.InOutImageButton
+            android:id="@+id/composer_button_sleep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="8.666666666666667dp"
+            android:layout_marginLeft="144dp"
+            android:background="@drawable/composer_sleep"
+            android:visibility="gone" />
+        <!--
          <ProgressBar
         android:id="@+id/pb_loading"
         style="@style/ListSpinner"
         android:layout_centerInParent="true" />
-    -->
+        -->
 
+    </com.yulingtech.lycommon.widget.InOutRelativeLayout>
+
+    <com.yulingtech.lycommon.widget.InOutRelativeLayout
+        android:id="@+id/composer_buttons_show_hide_button"
+        android:layout_width="60dp"
+        android:layout_height="57.33333333333333dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/composer_button_center" >
+
+        <ImageView
+            android:id="@+id/composer_buttons_show_hide_button_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/lbs_send_normal" />
+    </com.yulingtech.lycommon.widget.InOutRelativeLayout>
 
 </RelativeLayout>

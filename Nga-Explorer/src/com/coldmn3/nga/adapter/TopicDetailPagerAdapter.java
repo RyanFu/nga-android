@@ -1,10 +1,10 @@
 package com.coldmn3.nga.adapter;
 
-import com.coldmn3.nga.ui.TopicDetailFragment;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.coldmn3.nga.ui.TopicDetailFragment;
 
 public class TopicDetailPagerAdapter extends FragmentStatePagerAdapter {
 

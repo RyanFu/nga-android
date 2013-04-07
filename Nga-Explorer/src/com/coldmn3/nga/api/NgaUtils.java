@@ -1,7 +1,6 @@
 package com.coldmn3.nga.api;
 
 import com.yulingtech.lycommon.util.StringUtils;
-import com.yulingtech.lycommon.util.ULog;
 
 public class NgaUtils {
 

@@ -4,13 +4,20 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,9 +27,14 @@ import com.coldmn3.nga.app.AppContext;
 import com.coldmn3.nga.app.AppException;
 import com.coldmn3.nga.bean.TopicFloor;
 import com.coldmn3.nga.bean.TopicFloorList;
+import com.yulingtech.lycommon.animation.ComposerButtonAnimation;
+import com.yulingtech.lycommon.animation.ComposerButtonGrowAnimationIn;
+import com.yulingtech.lycommon.animation.ComposerButtonGrowAnimationOut;
+import com.yulingtech.lycommon.animation.ComposerButtonShrinkAnimationOut;
+import com.yulingtech.lycommon.animation.InOutAnimation;
 import com.yulingtech.lycommon.util.AndroidUtils;
 import com.yulingtech.lycommon.util.StringUtils;
-import com.yulingtech.lycommon.util.ULog;
+import com.yulingtech.lycommon.widget.InOutImageButton;
 
 public class TopicDetailFragment extends ListFragment {
 	private ListViewTopicDetailAdapter adapter;
@@ -33,6 +45,16 @@ public class TopicDetailFragment extends ListFragment {
 	// private ProgressBar progressBar;
 	private TextView loadingText;
 	private ListView listView;
+
+	// path ui
+	private boolean areButtonsShowing;
+	private ViewGroup composerButtonsWrapper;
+	private View composerButtonsShowHideButtonIcon;
+	private View composerButtonsShowHideButton;
+	private Animation rotateStoryAddButtonIn;
+	private Animation rotateStoryAddButtonOut;
+
+	private Activity activity;
 
 	public static TopicDetailFragment newInstance(String page) {
 		TopicDetailFragment fragment = new TopicDetailFragment();
@@ -47,7 +69,121 @@ public class TopicDetailFragment extends ListFragment {
 		super.onViewCreated(view, savedInstanceState);
 		// progressBar = (ProgressBar) view.findViewById(R.id.pb_loading);
 		loadingText = (TextView) view.findViewById(R.id.loading_text);
+
+		composerButtonsWrapper = (ViewGroup) view.findViewById(R.id.composer_buttons_wrapper);
+		composerButtonsShowHideButton = view.findViewById(R.id.composer_buttons_show_hide_button);
+		composerButtonsShowHideButtonIcon = view.findViewById(R.id.composer_buttons_show_hide_button_icon);
+		rotateStoryAddButtonIn = AnimationUtils.loadAnimation(view.getContext(), R.anim.rotate_story_add_button_in);
+		rotateStoryAddButtonOut = AnimationUtils.loadAnimation(view.getContext(), R.anim.rotate_story_add_button_out);
+		composerButtonsShowHideButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				toggleComposerButtons();
+			}
+		});
+		for (int i = 0; i < composerButtonsWrapper.getChildCount(); i++) {
+			composerButtonsWrapper.getChildAt(i).setOnClickListener(new ComposerLauncher(null, new Runnable() {
+
+				@Override
+				public void run() {
+					new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							try {
+								Thread.sleep(400);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							reshowComposer();
+						}
+					}).start();
+				}
+			}));
+		}
+		composerButtonsShowHideButton.startAnimation(new ComposerButtonGrowAnimationIn(200));
+
 		listView = getListView();
+	}
+
+	private class ComposerLauncher implements View.OnClickListener {
+
+		public final Runnable DEFAULT_RUN = new Runnable() {
+
+			@Override
+			public void run() {
+				startActivityForResult(new Intent(activity, ComposerLauncher.this.cls), 1);
+			}
+		};
+		private final Class<? extends Activity> cls;
+		private final Runnable runnable;
+
+		private ComposerLauncher(Class<? extends Activity> c, Runnable runnable) {
+			this.cls = c;
+			this.runnable = runnable;
+		}
+
+		@Override
+		public void onClick(View paramView) {
+			startComposerButtonClickedAnimations(paramView, runnable);
+		}
+	}
+
+	private void startComposerButtonClickedAnimations(View view, final Runnable runnable) {
+		this.areButtonsShowing = false;
+		Animation shrinkOut1 = new ComposerButtonShrinkAnimationOut(300);
+		Animation shrinkOut2 = new ComposerButtonShrinkAnimationOut(300);
+		Animation growOut = new ComposerButtonGrowAnimationOut(300);
+		shrinkOut1.setInterpolator(new AnticipateInterpolator(2.0F));
+		shrinkOut1.setAnimationListener(new Animation.AnimationListener() {
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				composerButtonsShowHideButtonIcon.clearAnimation();
+				if (runnable != null) {
+					runnable.run();
+				}
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+		});
+		this.composerButtonsShowHideButton.startAnimation(shrinkOut1);
+		for (int i = 0; i < this.composerButtonsWrapper.getChildCount(); i++) {
+			final View button = this.composerButtonsWrapper.getChildAt(i);
+			if (!(button instanceof InOutImageButton))
+				continue;
+			if (button.getId() != view.getId())
+				// 其他按钮缩小消失
+				button.setAnimation(shrinkOut2);
+			else {
+				// 被点击按钮放大消失
+				button.startAnimation(growOut);
+			}
+		}
+	}
+
+	private void reshowComposer() {
+		Animation growIn = new ComposerButtonGrowAnimationIn(300);
+		growIn.setInterpolator(new OvershootInterpolator(2.0F));
+		this.composerButtonsShowHideButton.startAnimation(growIn);
+	}
+
+	private void toggleComposerButtons() {
+		if (!areButtonsShowing) {
+			ComposerButtonAnimation.startAnimations(this.composerButtonsWrapper, InOutAnimation.Direction.IN);
+			this.composerButtonsShowHideButtonIcon.startAnimation(this.rotateStoryAddButtonIn);
+		} else {
+			ComposerButtonAnimation.startAnimations(this.composerButtonsWrapper, InOutAnimation.Direction.OUT);
+			this.composerButtonsShowHideButtonIcon.startAnimation(this.rotateStoryAddButtonOut);
+		}
+		areButtonsShowing = !areButtonsShowing;
 	}
 
 	@Override
@@ -58,6 +194,7 @@ public class TopicDetailFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+
 		appContext = (AppContext) getActivity().getApplication();
 		// 网络连接判断
 		if (!appContext.isNetworkConnected()) {
@@ -80,6 +217,12 @@ public class TopicDetailFragment extends ListFragment {
 		if (topicListData.isEmpty()) {
 			loadTopicDetailListDate(page, tid);
 		}
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.activity = activity;
 	}
 
 	/**

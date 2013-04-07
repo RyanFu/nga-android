@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,8 +17,6 @@ import android.widget.TextView;
 
 import com.coldmn3.nga.R;
 import com.coldmn3.nga.app.AppContext;
-import com.coldmn3.nga.ui.Account;
-import com.coldmn3.nga.ui.Login;
 
 public class ListViewAccountAdapter extends BaseAdapter {
 

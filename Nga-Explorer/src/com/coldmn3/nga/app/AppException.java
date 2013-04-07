@@ -24,7 +24,6 @@ import android.content.pm.PackageInfo;
 import android.os.Environment;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.coldmn3.nga.R;
 import com.yulingtech.lycommon.util.AndroidUtils;

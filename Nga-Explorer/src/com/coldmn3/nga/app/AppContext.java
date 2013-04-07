@@ -25,7 +25,6 @@ import com.coldmn3.nga.api.NgaApi;
 import com.coldmn3.nga.bean.TopicFloorList;
 import com.coldmn3.nga.bean.TopicList;
 import com.coldmn3.nga.bean.User;
-import com.yulingtech.lycommon.util.AndroidUtils;
 import com.yulingtech.lycommon.util.CyptoUtils;
 import com.yulingtech.lycommon.util.StringUtils;
 import com.yulingtech.lycommon.util.ULog;

@@ -7,14 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.coldmn3.nga.R;
-import com.coldmn3.nga.adapter.ListViewTopicDetailAdapter;
 import com.coldmn3.nga.adapter.TopicDetailPagerAdapter;
 import com.coldmn3.nga.app.AppContext;
 import com.coldmn3.nga.app.AppManager;
 import com.viewpagerindicator.PageIndicator;
 import com.viewpagerindicator.TitlePageIndicator;
-import com.yulingtech.lycommon.util.StringUtils;
-import com.yulingtech.lycommon.util.ULog;
 
 public class TopicDetail extends FragmentActivity {
 
@@ -42,15 +39,16 @@ public class TopicDetail extends FragmentActivity {
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPager.setAdapter(mAdapter);
 
-//		TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
-//		mIndicator = indicator;
-//		mIndicator.setViewPager(mPager);
-//		final float density = getResources().getDisplayMetrics().density;
-//		indicator.setFooterIndicatorHeight(1 * density);
+		TitlePageIndicator indicator = (TitlePageIndicator) findViewById(R.id.indicator);
+		mIndicator = indicator;
+		mIndicator.setViewPager(mPager);
+		final float density = getResources().getDisplayMetrics().density;
+		indicator.setFooterIndicatorHeight(1 * density);
 //		indicator.setBackgroundColor(0xFF313131);
-//		indicator.setFooterColor(0xFF313131);
-//		indicator.setSelectedColor(this.getResources().getColor(R.color.holo_blue_light));
-//		indicator.setTextSize(14 * density);
+		indicator.setBackgroundResource(R.drawable.bottom_bar);
+		indicator.setFooterColor(0xFF313131);
+		indicator.setSelectedColor(this.getResources().getColor(R.color.holo_blue_light));
+		indicator.setTextSize(14 * density);
 
 	}
 

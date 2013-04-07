@@ -33,4 +33,16 @@
         android:background="@drawable/bar_more"
         android:textColor="#fff" />
 
+    <!--
+         <TextView
+        android:id="@+id/detail_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/topic_detail_title"
+        android:layout_alignBottom="@+id/topic_detail_title"
+        android:layout_alignParentRight="true"
+        android:textColor="#ffffff"
+        android:text="[1...2...3]" />
+    -->
+
 </RelativeLayout>

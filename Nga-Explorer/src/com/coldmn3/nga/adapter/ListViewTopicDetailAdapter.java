@@ -1,10 +1,6 @@
 package com.coldmn3.nga.adapter;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.ref.SoftReference;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 import android.app.Activity;

@@ -10,14 +10,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.coldmn3.nga.R;
 import com.coldmn3.nga.adapter.ListViewAccountAdapter;
 import com.coldmn3.nga.app.AppContext;
-import com.yulingtech.lycommon.util.ULog;
 
 public class Account extends BaseActivity {
 
