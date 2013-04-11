@@ -10,27 +10,29 @@
         android:layout_width="70dp"
         android:layout_height="match_parent"
         android:clickable="true"
+        android:orientation="vertical"
         android:padding="2dp" >
 
         <TextView
             android:id="@+id/topic_floor_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:text="username"
             android:textColor="#121C46"
             android:textSize="12.0sp" />
 
         <ImageView
             android:id="@+id/topic_floor_avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/topic_floor_author"
-             />
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/topic_floor_author" />
 
         <TextView
             android:id="@+id/topic_floor_aurvrc"
             style="@style/smallfont.gray"
-            android:layout_alignLeft="@id/topic_floor_avatar"
+            android:layout_alignParentLeft="true"
             android:layout_below="@+id/topic_floor_avatar"
             android:text="威望:1" />
 
@@ -39,6 +41,7 @@
             style="@style/smallfont.gray"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/topic_floor_aurvrc"
+            android:layout_weight="1"
             android:text="发帖:523" />
     </RelativeLayout>
 
@@ -70,17 +73,22 @@
                 android:id="@+id/floor"
                 style="@style/smallfont.gray"
                 android:layout_weight="1"
-                android:paddingRight="5dp"
                 android:gravity="right"
+                android:paddingRight="5dp"
                 android:text="[0楼]" />
         </LinearLayout>
 
-        <WebView
-            android:id="@+id/content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none" />
+        <FrameLayout
+            android:id="@+id/content_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
+            <WebView
+                android:id="@+id/content"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none" />
+        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

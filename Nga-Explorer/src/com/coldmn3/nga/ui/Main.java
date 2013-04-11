@@ -208,12 +208,13 @@ public class Main extends BaseActivity {
 		}
 	}
 
-    /**
-     * 加载回复
-     * @param page
-     * @param handler
-     * @param action
-     */
+	/**
+	 * 加载回复
+	 * 
+	 * @param page
+	 * @param handler
+	 * @param action
+	 */
 	private void loadDefaultTopics(final String page, final Handler handler, final int action) {
 
 		new Thread() {
@@ -375,10 +376,19 @@ public class Main extends BaseActivity {
 	}
 
 	public void search(View view) {
-
+		startActivity(new Intent(Main.this, Search.class));
 	}
 
 	public void refresh(View view) {
 		lvTopics.clickRefresh();
+	}
+
+	public void newPost(View view) {
+		startActivity(new Intent(Main.this, Post.class));
+	}
+
+	public void center(View view) {
+		startActivity(new Intent(Main.this, Center.class));
+
 	}
 }

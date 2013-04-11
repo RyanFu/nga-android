@@ -5,12 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/floor_left"
         android:layout_width="70dp"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:gravity="top"
         android:orientation="vertical"
         android:padding="2dp" >
 
@@ -18,26 +17,33 @@
             android:id="@+id/topic_floor_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:text="username"
             android:textColor="#121C46"
             android:textSize="12.0sp" />
 
         <ImageView
             android:id="@+id/topic_floor_avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/default_avatar" />
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/topic_floor_author" />
 
         <TextView
             android:id="@+id/topic_floor_aurvrc"
             style="@style/smallfont.gray"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/topic_floor_avatar"
             android:text="威望:1" />
 
         <TextView
             android:id="@+id/topic_floor_postnum"
             style="@style/smallfont.gray"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/topic_floor_aurvrc"
+            android:layout_weight="1"
             android:text="发帖:523" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:id="@+id/view1"
@@ -45,7 +51,7 @@
         android:layout_height="match_parent"
         android:background="#FFFFFF" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/floor_right"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -54,35 +60,38 @@
         <LinearLayout
             android:id="@+id/layout1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:layout_height="15dp"
             android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/postdate"
                 style="@style/smallfont.gray"
-                android:layout_gravity="left"
-                android:layout_weight="1"
                 android:paddingLeft="5dp"
                 android:text="2013-02-03 14:29" />
 
             <TextView
                 android:id="@+id/floor"
                 style="@style/smallfont.gray"
-                android:layout_gravity="right"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:paddingRight="5dp"
                 android:text="[0楼]" />
         </LinearLayout>
 
-        <WebView
+        <!--
+             <WebView
             android:id="@+id/content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/layout1" />
-    </RelativeLayout>
+            android:scrollbars="none" />
+        -->
+
+        <LinearLayout
+            android:id="@+id/content_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

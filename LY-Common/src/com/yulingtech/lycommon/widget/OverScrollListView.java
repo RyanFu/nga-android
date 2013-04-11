@@ -8,7 +8,7 @@ import android.util.DisplayMetrics;
 import android.widget.ListView;
  
 public class OverScrollListView extends ListView{
-    private static final int MAX_Y_OVERSCROLL_DISTANCE = 5000;
+    private static final int MAX_Y_OVERSCROLL_DISTANCE = 50;
      
     private Context mContext;
     private int mMaxYOverscrollDistance;

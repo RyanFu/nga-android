@@ -62,7 +62,7 @@
             android:id="@+id/btn_personal"
             style="@style/bottom_bar_btn"
             android:drawableTop="@drawable/bottom_btn_personal"
-            android:onClick="personal"
+            android:onClick="center"
             android:text="@string/personal" />
 
         <Button

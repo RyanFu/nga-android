@@ -85,8 +85,9 @@ public class TopicFloorList {
 			}
 
 			// 判断是否是镜像帖子
-			JSONObject _TObject = dataObject.getJSONObject("__T");
-			if (_TObject != null) {
+			JSONObject _TObject = null;
+			if (dataObject.has("__T")) {
+				_TObject = dataObject.getJSONObject("__T");
 				if (_TObject.has("quote_from")) {
 					String quote = _TObject.getString("quote_from");
 					if (!quote.equals("0")) {
@@ -96,8 +97,8 @@ public class TopicFloorList {
 				}
 			}
 
-			JSONObject topicsObject = dataObject.getJSONObject("__R");
-			if (topicsObject == null) {
+			JSONObject topicsObject = null;
+			if (!dataObject.has("__R")) {
 				String error = dataObject.getString("__MESSAGE");
 				if (error.startsWith("(ERROR:16)")) {
 					topicDetailList.setErrorMsg("账号权限不足");
@@ -107,6 +108,8 @@ public class TopicFloorList {
 					topicDetailList.setErrorMsg(Html.fromHtml(error).toString());
 				}
 				return topicDetailList;
+			} else {
+				topicsObject = dataObject.getJSONObject("__R");
 			}
 
 			int rows = dataObject.getInt("__R__ROWS");

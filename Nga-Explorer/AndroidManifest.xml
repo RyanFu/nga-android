@@ -49,6 +49,15 @@
         <activity
             android:name="com.coldmn3.nga.ui.TopicDetail"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.coldmn3.nga.ui.Post"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.coldmn3.nga.ui.Search"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.coldmn3.nga.ui.Center"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

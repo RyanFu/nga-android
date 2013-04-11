@@ -18,6 +18,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,7 +36,9 @@ import com.yulingtech.lycommon.animation.ComposerButtonShrinkAnimationOut;
 import com.yulingtech.lycommon.animation.InOutAnimation;
 import com.yulingtech.lycommon.util.AndroidUtils;
 import com.yulingtech.lycommon.util.StringUtils;
+import com.yulingtech.lycommon.util.ULog;
 import com.yulingtech.lycommon.widget.InOutImageButton;
+import com.yulingtech.lycommon.widget.ZakerProgressDialog;
 
 public class TopicDetailFragment extends ListFragment {
 	private ListViewTopicDetailAdapter adapter;
@@ -45,6 +49,8 @@ public class TopicDetailFragment extends ListFragment {
 	// private ProgressBar progressBar;
 	private TextView loadingText;
 	private ListView listView;
+	private ImageView img_loading;
+	private RotateAnimation rotateAnimation;
 
 	// path ui
 	private boolean areButtonsShowing;
@@ -69,6 +75,8 @@ public class TopicDetailFragment extends ListFragment {
 		super.onViewCreated(view, savedInstanceState);
 		// progressBar = (ProgressBar) view.findViewById(R.id.pb_loading);
 		loadingText = (TextView) view.findViewById(R.id.loading_text);
+		img_loading = (ImageView) view.findViewById(R.id.img_load);
+		rotateAnimation = (RotateAnimation) AnimationUtils.loadAnimation(view.getContext(), R.anim.refresh); // 加载XML文件中定义的动画
 
 		composerButtonsWrapper = (ViewGroup) view.findViewById(R.id.composer_buttons_wrapper);
 		composerButtonsShowHideButton = view.findViewById(R.id.composer_buttons_show_hide_button);
@@ -91,12 +99,8 @@ public class TopicDetailFragment extends ListFragment {
 
 						@Override
 						public void run() {
-							try {
-								Thread.sleep(400);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-							reshowComposer();
+							startActivity(new Intent(TopicDetailFragment.this.getActivity(), Post.class));
+//							reshowComposer();
 						}
 					}).start();
 				}
@@ -233,7 +237,11 @@ public class TopicDetailFragment extends ListFragment {
 	 */
 	private void loadTopicDetailListDate(final String page, final String tid) {
 
+		loadingText.setText("加载中...");
 		loadingText.setVisibility(View.VISIBLE);
+		img_loading.setVisibility(View.VISIBLE);
+		img_loading.startAnimation(rotateAnimation);// 开始动画
+
 		listView.setVisibility(View.GONE);
 		final Handler handler = new TopicDetailHandler(TopicDetailFragment.this);
 		new Thread() {
@@ -245,9 +253,6 @@ public class TopicDetailFragment extends ListFragment {
 				try {
 					TopicFloorList list = appContext.getTopicDetailList(page, tid);
 					if (list != null) {
-						if (!StringUtils.isEmpty(list.getErrorMsg())) {
-							AndroidUtils.Toast(TopicDetailFragment.this.getActivity(), list.getErrorMsg());
-						}
 						msg.what = 1;
 						msg.obj = list;
 					} else {
@@ -280,16 +285,22 @@ public class TopicDetailFragment extends ListFragment {
 			if (topicDetail != null) {
 
 				topicDetail.loadingText.setVisibility(View.GONE);
+				topicDetail.img_loading.clearAnimation();
+				topicDetail.img_loading.setVisibility(View.INVISIBLE);
 				topicDetail.listView.setVisibility(View.VISIBLE);
+
 				if (msg.what == 1) {
 					TopicFloorList tList = (TopicFloorList) msg.obj;
+					if (!StringUtils.isEmpty(tList.getErrorMsg())) {
+						AndroidUtils.Toast(topicDetail.getActivity(), tList.getErrorMsg());
+					}
 					topicDetail.topicListData.clear();
 					topicDetail.topicListData.addAll(tList.getTopicDetailList());
 					topicDetail.adapter.notifyDataSetChanged();
 				} else if (msg.what == 0) {
 					AndroidUtils.Toast(topicDetail.getActivity(), "加载帖子列表失败，请尝试重新登陆");
 				} else if (msg.what == -1) {
-					// eception
+					// exception
 					((AppException) msg.obj).makeToast(topicDetail.getActivity());
 				}
 

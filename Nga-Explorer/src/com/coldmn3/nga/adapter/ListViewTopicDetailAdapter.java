@@ -8,8 +8,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Handler;
-import android.os.Message;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -52,7 +50,7 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 
 	private BitmapManager bitmapManager;
 
-	private static SparseArray<SoftReference<View>> cache;
+	private SparseArray<SoftReference<View>> cache;
 
 	public static final class ViewHolder {
 		public TextView author;
@@ -62,7 +60,6 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 		public TextView postdate;
 		public TextView aurvrc;
 		public TextView postnum;
-		int position = -1;
 	}
 
 	public ListViewTopicDetailAdapter(Context context, List<TopicFloor> data) {
@@ -94,32 +91,33 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-//		TopicFloor detail = listData.get(position);
-//		ViewHolder viewHolder = null;
-//		if (convertView == null) {
-//			viewHolder = new ViewHolder();
-//			convertView = inflater.inflate(R.layout.relative_aritclelist, parent, false);
-//
-//			viewHolder.author = (TextView) convertView.findViewById(R.id.topic_floor_author);
-//			viewHolder.content = (WebView) convertView.findViewById(R.id.content);
-//			viewHolder.floor = (TextView) convertView.findViewById(R.id.floor);
-//			viewHolder.postdate = (TextView) convertView.findViewById(R.id.postdate);
-//			viewHolder.avatar = (ImageView) convertView.findViewById(R.id.topic_floor_avatar);
-//			viewHolder.postnum = (TextView) convertView.findViewById(R.id.topic_floor_postnum);
-//			viewHolder.aurvrc = (TextView) convertView.findViewById(R.id.topic_floor_aurvrc);
-//			convertView.setTag(viewHolder);
-//		} else {
-//			viewHolder = (ViewHolder) convertView.getTag();
-//		}
-//		handleAvatar(viewHolder, detail.getJs_escap_avatar(), true);
-//		viewHolder.author.setText(detail.getAuthor());
-//		viewHolder.floor.setText("[" + detail.getLou() + "楼]");
-//		viewHolder.postdate.setText(detail.getPostdate());
-//		viewHolder.aurvrc.setText("威望:" + detail.getAurvrc());
-//		viewHolder.postnum.setText("发帖:" + detail.getPostnum());
-//
-//		viewHolder.content.loadDataWithBaseURL(" fake", detail.getContent(), "text/html", "utf-8", null);
-		
+		// TopicFloor detail = listData.get(position);
+		// ViewHolder viewHolder = null;
+		// if (convertView == null) {
+		// viewHolder = new ViewHolder();
+		// convertView = inflater.inflate(R.layout.relative_aritclelist, parent, false);
+		//
+		// viewHolder.author = (TextView) convertView.findViewById(R.id.topic_floor_author);
+		// viewHolder.content = (WebView) convertView.findViewById(R.id.content);
+		// viewHolder.floor = (TextView) convertView.findViewById(R.id.floor);
+		// viewHolder.postdate = (TextView) convertView.findViewById(R.id.postdate);
+		// viewHolder.avatar = (ImageView) convertView.findViewById(R.id.topic_floor_avatar);
+		// viewHolder.postnum = (TextView) convertView.findViewById(R.id.topic_floor_postnum);
+		// viewHolder.aurvrc = (TextView) convertView.findViewById(R.id.topic_floor_aurvrc);
+		// convertView.setTag(viewHolder);
+		// } else {
+		// viewHolder = (ViewHolder) convertView.getTag();
+		// }
+		// handleAvatar(viewHolder, detail.getJs_escap_avatar(), true);
+		// viewHolder.author.setText(detail.getAuthor());
+		// viewHolder.floor.setText("[" + detail.getLou() + "楼]");
+		// viewHolder.postdate.setText(detail.getPostdate());
+		// viewHolder.aurvrc.setText("威望:" + detail.getAurvrc());
+		// viewHolder.postnum.setText("发帖:" + detail.getPostnum());
+		//
+		// viewHolder.content.loadDataWithBaseURL(" fake", detail.getContent(), "text/html",
+		// "utf-8", null);
+
 		ViewHolder viewHolder = null;
 
 		SoftReference<View> ref = cache.get(position);
@@ -128,7 +126,9 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 			cachedView = ref.get();
 		}
 
-		if (convertView == null) {
+		if (cachedView != null) {
+			return cachedView;
+		} else {
 			viewHolder = new ViewHolder();
 			convertView = inflater.inflate(R.layout.topic_flooritem_1, parent, false);
 
@@ -142,55 +142,42 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 
 			convertView.setTag(viewHolder);
 			cache.put(position, new SoftReference<View>(convertView));
-		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
+
 		}
+
+		// if (convertView == null) {
+
+		// } else {
+		// viewHolder = (ViewHolder) convertView.getTag();
+		// viewHolder.content.stopLoading();
+		// if (viewHolder.content.getHeight() > 300) {
+		// convertView = inflater.inflate(R.layout.topic_flooritem_1, parent, false);
+		// viewHolder.author = (TextView) convertView.findViewById(R.id.topic_floor_author);
+		// viewHolder.content = (WebView) convertView.findViewById(R.id.content);
+		// viewHolder.floor = (TextView) convertView.findViewById(R.id.floor);
+		// viewHolder.postdate = (TextView) convertView.findViewById(R.id.postdate);
+		// viewHolder.aurvrc = (TextView) convertView.findViewById(R.id.topic_floor_aurvrc);
+		// viewHolder.postnum = (TextView) convertView.findViewById(R.id.topic_floor_postnum);
+		// viewHolder.avatar = (ImageView) convertView.findViewById(R.id.topic_floor_avatar);
+		// convertView.setTag(viewHolder);
+		// }
+		// }
 
 		TopicFloor detail = listData.get(position);
 
-		viewHolder.content.setFocusableInTouchMode(false);
-		viewHolder.content.setFocusable(false);
-		viewHolder.content.setLongClickable(false);
-		viewHolder.content.setTag(detail.getLou());
-
-		WebSettings setting = viewHolder.content.getSettings();
-		// setting.setBlockNetworkImage(!showImage);
-		// setting.setDefaultFontSize(PhoneConfiguration.getInstance().getWebSize());
-		setting.setJavaScriptEnabled(false);
-		setting.setBuiltInZoomControls(true);
-		setting.setJavaScriptEnabled(false);
-		setting.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-		setting.setRenderPriority(RenderPriority.HIGH);
-
+		// 根据设置和网络环境 是否加载头像s
 		int picOp = appContext.getFloorPictureOption();
 		boolean net = false;
 		if (picOp == 2 || (picOp == 1 && appContext.getNetworkType() == AppContext.NETTYPE_WIFI)) {
-			setting.setBlockNetworkImage(false);
 			net = true;
 		} else {
-			setting.setBlockNetworkImage(true);
 			net = false;
 		}
-		viewHolder.position = position;
 
-		String url = detail.getJs_escap_avatar();
-		handleAvatar(viewHolder, url, net); // 头像
+		handleContent(viewHolder.content, detail.getContent(), !net);
 
-		String content = detail.getContent();
-		String subject = detail.getSubject();
-		if (content == null) {
-			content = "";
-		}
-		if (subject == null) {
-			subject = "";
-		}
-		content = "<strong>" + subject + "</strong>" + " <br/>" + content;
-		viewHolder.content.loadDataWithBaseURL(" fake", "loading", "text/html", "utf-8", null);
+		handleAvatar(viewHolder, detail.getJs_escap_avatar(), net); // 头像
 
-		// viewHolder.content.refreshDrawableState();
-		// viewHolder.content.clearView();
-		viewHolder.content.loadDataWithBaseURL(" fake", detail.getContent(), "text/html", "utf-8", null);
-		// handleFloorContent(viewHolder.content, content, false);
 		viewHolder.author.setText(detail.getAuthor());
 		viewHolder.floor.setText("[" + detail.getLou() + "楼]");
 		viewHolder.postdate.setText(detail.getPostdate());
@@ -253,55 +240,25 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 				});
 			} else {
 				viewHolder.avatar.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.default_avatar));
-//				viewHolder.avatar.setVisibility(View.GONE);
+				// viewHolder.avatar.setVisibility(View.GONE);
 			}
 		} else {
 			viewHolder.avatar.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.default_trans));
 		}
 	}
 
-	private void handleFloorContent(final WebView contentView, final String content, final boolean b) {
-		WebSettings webSettings = contentView.getSettings();
-		webSettings.setDefaultFontSize(14);
-		webSettings.setJavaScriptEnabled(false);
-		webSettings.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
-		webSettings.setRenderPriority(RenderPriority.HIGH);
+	private void handleContent(WebView view, String data, boolean net) {
+		view.setFocusableInTouchMode(false);
+		view.setFocusable(false);
+		if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.FROYO) {
+			view.setLongClickable(false);
+		}
 
-		contentView.setFocusableInTouchMode(false);
-		contentView.setFocusable(false);
-		contentView.loadDataWithBaseURL("fake", "loading", "text/html", "utf-8", null);
-		webSettings.setBlockNetworkImage(b);
-		final Handler handler = new Handler() {
+		WebSettings setting = view.getSettings();
+		setting.setBlockNetworkImage(net);
+		setting.setDefaultFontSize(14);
+		setting.setJavaScriptEnabled(false);
 
-			@Override
-			public void handleMessage(Message msg) {
-				String result = (String) msg.obj;
-				contentView.loadDataWithBaseURL("fake", result, "text/html", "utf-8", null);
-				contentView.refreshDrawableState();
-				// contentView.loadData(result, "text/html; charset=gbk", null);
-			}
-
-		};
-
-		new Thread() {
-
-			@Override
-			public void run() {
-				// String result = NgaTagHandler.formatTags(content, b);
-				Message message = Message.obtain();
-				// message.obj = result;
-				try {
-					Thread.sleep(100);
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-
-				message.obj = content;
-				handler.sendMessage(message);
-			}
-
-		}.start();
-
+		view.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
 	}
-
 }

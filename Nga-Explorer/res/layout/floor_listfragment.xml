@@ -20,6 +20,16 @@
         android:text="加载中..." >
     </TextView>
 
+    <ImageView
+        android:id="@+id/img_load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="10dip"
+        android:layout_toLeftOf="@id/loading_text"
+        android:background="@drawable/zaker_refresh_icon"
+        android:contentDescription="@string/app_name" />
+
     <com.yulingtech.lycommon.widget.InOutRelativeLayout
         android:id="@+id/composer_buttons_wrapper"
         android:layout_width="fill_parent"
@@ -48,7 +58,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="8.666666666666667dp"
             android:layout_marginLeft="144dp"
-            android:background="@drawable/composer_sleep"
+            android:background="@drawable/composer_thought"
             android:visibility="gone" />
         <!--
          <ProgressBar

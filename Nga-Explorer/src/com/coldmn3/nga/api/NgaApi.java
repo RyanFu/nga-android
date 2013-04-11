@@ -194,6 +194,10 @@ public class NgaApi {
 			throw AppException.network(e);
 		}
 	}
+	
+	public static String addTopicToFav(AppContext appContext, String tid) throws AppException {
+		return post(appContext, URLs.BOOKMARK + tid, null, null, null);
+	}
 
 	// TODO 分离登陆和加载数据的逻辑
 	private static String post(AppContext appContext, String url, Map<String, Object> params, Map<String, File> files, User user) throws AppException {

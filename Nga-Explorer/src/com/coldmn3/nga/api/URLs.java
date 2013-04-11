@@ -9,4 +9,5 @@ public class URLs {
 	public final static String THREAD_PHP = HOST + "/thread.php?";
 	public final static String READ_PHP = HOST + "/read.php?";
 	public final static String REPLY_URL = "http://bbs.ngacn.cc/post.php?";
+	public final static String BOOKMARK = "http://bbs.ngacn.cc/nuke.php?func=topicfavor&action=add&raw=1&tid=";
 }

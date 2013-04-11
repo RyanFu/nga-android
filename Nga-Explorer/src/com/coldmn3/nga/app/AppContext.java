@@ -248,6 +248,14 @@ public class AppContext extends Application {
 		}
 		return topicDetailList;
 	}
+	
+	/**
+	 * 收藏主题
+	 * @param tid
+	 */
+	public String addTopicToFav(String tid) throws AppException {
+		return NgaApi.addTopicToFav(this, tid);
+	}
 
 	/**
 	 * 判断缓存数据是否可读
