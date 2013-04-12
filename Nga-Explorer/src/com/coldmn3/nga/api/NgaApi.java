@@ -146,7 +146,11 @@ public class NgaApi {
 		params.put("Accept-Charset", "GBK");
 
 		try {
+			long start_time = System.currentTimeMillis();
 			final TopicFloorList topicFloorList = TopicFloorList.parse(post(appContext, url, params, null, null));
+			long end_time = System.currentTimeMillis();
+			long parse_time = end_time - start_time;
+			ULog.e("TopicFloorList Parse Time:", " " + parse_time/1000000000);
 			final String quote = topicFloorList.getQuote_from();
 			if (!StringUtils.isEmpty(quote)) {
 				url = _MakeURL(URLs.READ_PHP, new HashMap<String, Object>() {
@@ -194,7 +198,36 @@ public class NgaApi {
 			throw AppException.network(e);
 		}
 	}
-	
+
+	public static TopicList getTopicList(AppContext appContext, final String page, final String fid, final String searchpost, final String favor,
+			final String authorid, final String key) throws AppException {
+		String url = _MakeURL(URLs.THREAD_PHP, new HashMap<String, Object>() {
+			{
+				put("page", page);
+				put("fid", fid);
+				put("searchpost", searchpost);
+				put("favor", favor);
+				put("authorid", authorid);
+				put("key", key);
+			}
+		});
+
+		ULog.i(LOG_TAG + " getTopicList", url);
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("Accept-Encoding", "gzip,deflate");
+		params.put("Accept-Charset", "GBK");
+
+		try {
+			return TopicList.parse(post(appContext, url, params, null, null));
+		} catch (Exception e) {
+			if (e instanceof AppException) {
+				throw (AppException) e;
+			}
+			throw AppException.network(e);
+		}
+	}
+
 	public static String addTopicToFav(AppContext appContext, String tid) throws AppException {
 		return post(appContext, URLs.BOOKMARK + tid, null, null, null);
 	}

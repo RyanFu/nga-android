@@ -55,6 +55,7 @@ public class AppContext extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		initLogin();
 		// 注册App异常崩溃处理器
 		Thread.setDefaultUncaughtExceptionHandler(AppException.getAppExceptionHandler());
 	}
@@ -232,6 +233,35 @@ public class AppContext extends Application {
 		return list;
 	}
 
+	public TopicList getTopicList(final String page, final String fid, final String searchpost, final String favor, final String authorid, final String key,
+			boolean isRefresh) throws AppException {
+		TopicList list = null;
+		String key_ = "topic_list_" + "fid" + fid + page;
+		if (isNetworkConnected() && (!isReadDataCache(key_) || isRefresh)) {
+
+			try {
+				list = NgaApi.getTopicList(this, page, fid, searchpost, favor, authorid, key);
+				if (list != null && page.equals("1")) {
+					list.setCacheKey(key_);
+					saveObject(list, key_);
+				}
+			} catch (AppException e) {
+				e.printStackTrace();
+				throw e;
+			}
+
+		} else {
+			// 读取序列化
+			list = (TopicList) readObject(key_);
+
+			if (list == null) {
+				list = new TopicList();
+			}
+
+		}
+		return list;
+	}
+
 	public TopicFloorList getTopicDetailList(String page, String tid) throws AppException {
 		TopicFloorList topicDetailList = null;
 		String key = "topic_floor_list_" + tid + "_" + page;
@@ -248,9 +278,10 @@ public class AppContext extends Application {
 		}
 		return topicDetailList;
 	}
-	
+
 	/**
 	 * 收藏主题
+	 * 
 	 * @param tid
 	 */
 	public String addTopicToFav(String tid) throws AppException {

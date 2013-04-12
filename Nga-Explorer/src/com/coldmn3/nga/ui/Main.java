@@ -1,5 +1,7 @@
 package com.coldmn3.nga.ui;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +79,11 @@ public class Main extends BaseActivity {
 			initTopicListView();
 			initTopicListData();
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 	}
 
 	@Override
@@ -250,6 +257,42 @@ public class Main extends BaseActivity {
 		}.start();
 	}
 
+	private void loadTopics(final String page, final String fid, final String searchpost, final String favor, final String authorid, final String key,
+			final Handler handler, final int action) {
+
+		new Thread() {
+
+			@Override
+			public void run() {
+
+				Message msg = Message.obtain();
+				boolean isRefresh = false;
+				if (action == Constants.LISTVIEW_ACTION_REFRESH) {
+					isRefresh = true;
+				}
+
+				try {
+					TopicList topicList = appContext.getTopicList(page, fid, searchpost, favor, authorid, key, isRefresh);
+					if (topicList != null) {
+						msg.what = 1;
+						msg.obj = topicList;
+					} else {
+						msg.what = 0;
+					}
+
+				} catch (AppException e) {
+					e.printStackTrace();
+					msg.what = -1;
+					msg.obj = e;
+				}
+				msg.arg1 = action;
+				msg.arg2 = Constants.LISTVIEW_DATATYPE_TOPICS;
+				handler.sendMessage(msg);
+			}
+
+		}.start();
+	}
+
 	private Handler getHandler(final PullToRefreshListView lv, final BaseAdapter adapter, final TextView more, final ProgressBar progress) {
 		return new Handler() {
 
@@ -376,7 +419,7 @@ public class Main extends BaseActivity {
 	}
 
 	public void search(View view) {
-		startActivity(new Intent(Main.this, Search.class));
+		startActivityForResult(new Intent(Main.this, Search.class), 1);
 	}
 
 	public void refresh(View view) {
@@ -391,4 +434,24 @@ public class Main extends BaseActivity {
 		startActivity(new Intent(Main.this, Center.class));
 
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == 1 && resultCode == RESULT_OK) {
+			String search_string = data.getStringExtra("search_string");
+			ULog.e("onActivityResult called", "search_string:" + search_string);
+			try {
+				search_string = URLEncoder.encode(search_string, "GBK");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			lvTopicData.clear();
+			lvTopicAdapter.notifyDataSetChanged();
+			lvTopicFooter.setVisibility(View.GONE);
+			loadTopics("1", "-7", "0", "0", "0", search_string, lvTopicHandler, Constants.LISTVIEW_ACTION_REFRESH);
+		}
+	}
+
 }
