@@ -1,15 +1,23 @@
 package com.coldmn3.nga.ui;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Handler.Callback;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -21,6 +29,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
+import cn.jpush.android.api.JPushInterface;
+import cn.sharesdk.framework.AbstractWeibo;
+import cn.sharesdk.onekeyshare.ShareAllGird;
 
 import com.coldmn3.nga.R;
 import com.coldmn3.nga.adapter.DropDownMenuAdapter;
@@ -34,7 +46,7 @@ import com.viewpagerindicator.TitlePageIndicator;
 import com.yulingtech.lycommon.util.AndroidUtils;
 import com.yulingtech.lycommon.util.StringUtils;
 
-public class TopicDetail extends FragmentActivity {
+public class TopicDetail extends FragmentActivity implements Callback{
 
 	private AppContext appContext;
 
@@ -43,6 +55,8 @@ public class TopicDetail extends FragmentActivity {
 	private PageIndicator mIndicator;
 
 	private String tid;
+    private String title;
+    private String url;
 
 	private Button dropDownMenu;
 	private PopupWindow popupWindow;
@@ -60,7 +74,7 @@ public class TopicDetail extends FragmentActivity {
 
 		dropDownMenu = (Button) findViewById(R.id.detail_more);
 
-		String title = getIntent().getExtras().getString("title");
+		title = getIntent().getExtras().getString("title");
 		tid = getIntent().getExtras().getString("tid");
 		TextView titleView = (TextView) findViewById(R.id.topic_detail_title);
 		titleView.setText(title);
@@ -85,6 +99,7 @@ public class TopicDetail extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				if (popupWindow == null) {
+
 					View view = getLayoutInflater().inflate(R.layout.dropdown_list, null);
 
 					ListView listView = (ListView) view.findViewById(R.id.lvGroup);
@@ -106,8 +121,7 @@ public class TopicDetail extends FragmentActivity {
 						@Override
 						public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 							if (position == 0) { // 收藏
-								
-								
+
 								new Thread() {
 
 									@Override
@@ -132,7 +146,7 @@ public class TopicDetail extends FragmentActivity {
 								}.start();
 
 							} else if (position == 1) {
-
+								newLaunchThread(false).start();
 							}
 							popupWindow.dismiss();
 						}
@@ -157,7 +171,85 @@ public class TopicDetail extends FragmentActivity {
 	public void back(View view) {
 		this.finish();
 	}
+
+	Handler handler = new Handler(this);
 	
+	// 使用快捷分享完成图文分享
+	private Thread newLaunchThread(final boolean silent) {
+		return new Thread(){
+			public void run() {
+				final String image = getImagePath();
+				handler.post(new Runnable() {
+					public void run() {
+						Intent i = new Intent(TopicDetail.this, ShareAllGird.class);
+						i.putExtra("notif_icon", R.drawable.ic_launcher);
+						i.putExtra("notif_title", TopicDetail.this.getString(R.string.app_name));
+						
+						i.putExtra("address", "13800123456");
+						i.putExtra("title", title);
+						i.putExtra("text", TopicDetail.this.getString(R.string.share_content));
+						i.putExtra("image", image);
+						i.putExtra("image_url", "http://sharesdk.cn/Public/Frontend/images/logo.png");
+						i.putExtra("site", TopicDetail.this.getString(R.string.app_name));
+						i.putExtra("siteUrl", "http://sharesdk.cn");
+						
+						i.putExtra("silent", silent);
+						TopicDetail.this.startActivity(i);
+					}
+				});
+			}
+		};
+	}
+	
+	private String getImagePath() {
+		try {
+			Activity act = (Activity) this;
+			String path;
+			if (Environment.getExternalStorageDirectory().exists()) {
+				path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/pic.jpg";
+			}
+			else {
+				path = act.getApplication().getFilesDir().getAbsolutePath() + "/pic.jpg";
+			}
+			File file = new File(path);
+			if (!file.exists()) {
+				file.createNewFile();
+				Bitmap pic = BitmapFactory.decodeResource(act.getResources(), R.drawable.pic);
+				FileOutputStream fos = new FileOutputStream(file);
+				pic.compress(CompressFormat.JPEG, 100, fos);
+				fos.flush();
+				fos.close();
+			}
+			return path;
+		} catch(Throwable t) {
+			t.printStackTrace();
+		}
+		return null;
+	}
+    
+	/** 处理操作结果 */
+	public boolean handleMessage(Message msg) {
+		AbstractWeibo weibo = (AbstractWeibo) msg.obj;
+		String text = AbstractWeibo.actionToString(msg.arg2);
+		switch (msg.arg1) {
+			case 1: { // 成功
+				text = weibo.getName() + " completed at " + text;
+			}
+			break;
+			case 2: { // 失败
+				text = weibo.getName() + " caught error at " + text;
+			}
+			break;
+			case 3: { // 取消
+				text = weibo.getName() + " canceled at " + text;
+			}
+			break;
+		}
+		
+		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+		return false;
+	}
+
 	static class BookmarkHandler extends Handler {
 		private final WeakReference<TopicDetail> mTopicDetail;
 

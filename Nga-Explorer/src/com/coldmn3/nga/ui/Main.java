@@ -19,6 +19,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import cn.jpush.android.api.JPushInterface;
+import cn.sharesdk.framework.AbstractWeibo;
 
 import com.coldmn3.nga.R;
 import com.coldmn3.nga.adapter.ListViewTopicAdapter;
@@ -62,7 +64,14 @@ public class Main extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        
+		JPushInterface.setDebugMode(true);
+		JPushInterface.init(getApplicationContext());
+		
 		setContentView(R.layout.main);
+        
+		AbstractWeibo.initSDK(this);
+		
 		appContext = (AppContext) getApplication();
 
 		appContext.initSettings();

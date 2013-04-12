@@ -17,7 +17,6 @@
         android:minWidth="58dp"
         android:text="喷他"
         android:textColor="#eee"
-        android:onClick="atPost"
         android:clickable="true" />
 
     <TextView
