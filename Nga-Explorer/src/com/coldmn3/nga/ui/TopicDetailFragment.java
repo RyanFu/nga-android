@@ -27,8 +27,8 @@ import com.coldmn3.nga.R;
 import com.coldmn3.nga.adapter.ListViewTopicDetailAdapter;
 import com.coldmn3.nga.app.AppContext;
 import com.coldmn3.nga.app.AppException;
-import com.coldmn3.nga.bean.TopicFloor;
 import com.coldmn3.nga.bean.TopicFloorList;
+import com.coldmn3.nga.bean.TopicFloor_;
 import com.yulingtech.lycommon.animation.ComposerButtonAnimation;
 import com.yulingtech.lycommon.animation.ComposerButtonGrowAnimationIn;
 import com.yulingtech.lycommon.animation.ComposerButtonGrowAnimationOut;
@@ -36,13 +36,11 @@ import com.yulingtech.lycommon.animation.ComposerButtonShrinkAnimationOut;
 import com.yulingtech.lycommon.animation.InOutAnimation;
 import com.yulingtech.lycommon.util.AndroidUtils;
 import com.yulingtech.lycommon.util.StringUtils;
-import com.yulingtech.lycommon.util.ULog;
 import com.yulingtech.lycommon.widget.InOutImageButton;
-import com.yulingtech.lycommon.widget.ZakerProgressDialog;
 
 public class TopicDetailFragment extends ListFragment {
 	private ListViewTopicDetailAdapter adapter;
-	private List<TopicFloor> topicListData = new ArrayList<TopicFloor>();
+	private List<TopicFloor_> topicListData = new ArrayList<TopicFloor_>();
 	private String tid;
 	private AppContext appContext;
 	private String page;

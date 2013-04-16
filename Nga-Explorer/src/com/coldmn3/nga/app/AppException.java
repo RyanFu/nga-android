@@ -287,6 +287,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
 		builder.setTitle(R.string.app_error);
 		builder.setMessage(R.string.app_error_message);
 		ULog.e("crashReport", crashReport);
+        ULog.e("crashReport length", "" + crashReport.length());
 		builder.setPositiveButton(R.string.submit_report, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();

@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -21,6 +24,7 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.params.ClientPNames;
 
 import android.graphics.Bitmap;
@@ -147,21 +151,10 @@ public class NgaApi {
 
 		try {
 			long start_time = System.currentTimeMillis();
-			final TopicFloorList topicFloorList = TopicFloorList.parse(post(appContext, url, params, null, null));
+			final TopicFloorList topicFloorList = TopicFloorList.parse(httpUrlConnPost(appContext, url, null, null, null));
 			long end_time = System.currentTimeMillis();
 			long parse_time = end_time - start_time;
-			ULog.e("TopicFloorList Parse Time:", " " + parse_time/1000000000);
-			final String quote = topicFloorList.getQuote_from();
-			if (!StringUtils.isEmpty(quote)) {
-				url = _MakeURL(URLs.READ_PHP, new HashMap<String, Object>() {
-					{
-						put("page", page);
-						put("tid", quote);
-					}
-				});
-				ULog.i(LOG_TAG + " getTopicDetailList", "quote from:" + quote + " redirect to :" + url);
-				return TopicFloorList.parse(post(appContext, url, params, null, null));
-			}
+			ULog.e("TopicFloorList Parse Time:", " " + parse_time + "ms");
 			return topicFloorList;
 		} catch (AppException e) {
 			if (e instanceof AppException) {
@@ -190,7 +183,18 @@ public class NgaApi {
 		params.put("Accept-Charset", "GBK");
 
 		try {
-			return TopicList.parse(post(appContext, url, params, null, null));
+			long start_time = System.nanoTime();
+			String result = httpUrlConnPost(appContext, url, params, null, null);
+			long end_time = System.nanoTime();
+			long parse_time = end_time - start_time;
+			ULog.e("TopicList Post Time:", " " + parse_time / 1000000.0f + "ms");
+
+			start_time = System.nanoTime();
+			TopicList list = TopicList.parse(result);
+			end_time = System.nanoTime();
+			parse_time = end_time - start_time;
+			ULog.e("TopicList Parse Time:", " " + parse_time / 1000000.0f + "ms");
+			return list;
 		} catch (Exception e) {
 			if (e instanceof AppException) {
 				throw (AppException) e;
@@ -232,6 +236,67 @@ public class NgaApi {
 		return post(appContext, URLs.BOOKMARK + tid, null, null, null);
 	}
 
+	private static String httpUrlConnPost(AppContext appContext, String urlString, Map<String, Object> params, Map<String, File> files, User user)
+			throws AppException {
+		HttpURLConnection conn = null;
+		InputStream is = null;
+
+		int time = 0;
+		String responseBody = "";
+
+		do {
+			try {
+				long start = System.nanoTime();
+
+				URL url = new URL(urlString);
+
+				conn = (HttpURLConnection) url.openConnection();
+				String cookie = getCookie(appContext);
+				conn.setRequestProperty("Cookie", cookie);
+				conn.setReadTimeout(TIMEOUT_SOCKET /* milliseconds */);
+				conn.setConnectTimeout(TIMEOUT_CONNECTION /* milliseconds */);
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Accept-Encoding", "gzip,deflate");
+				conn.setDoInput(true);
+				conn.setDoOutput(true);
+				conn.setRequestProperty("User-Agent", USER_AGENT);
+				conn.setRequestProperty("Accept-Charset", "GBK");
+
+				conn.connect();
+
+				is = conn.getInputStream();
+				if ("gzip".equals(conn.getHeaderField("Content-Encoding"))) {
+					is = new GZIPInputStream(is);
+				}
+
+				responseBody = IOUtils.toString(is, "GBK");
+				long end = System.nanoTime();
+				long e = end - start;
+				ULog.e("httpUrlConnPost time", "" + e / 1000000.0f + "ms");
+				ULog.d("httpUrlConnPost result:", "" + responseBody);
+				break;
+			} catch (IOException e) {
+				time++;
+				if (time < RETRY_TIME) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e1) {
+					}
+					continue;
+				}
+				// 发生致命的异常，可能是协议不对或者返回的内容有问题
+				e.printStackTrace();
+				throw AppException.http(e);
+			} finally {
+				if (conn != null) {
+					conn.disconnect();
+				}
+			}
+		} while (time < RETRY_TIME);
+
+		return responseBody;
+	}
+
 	// TODO 分离登陆和加载数据的逻辑
 	private static String post(AppContext appContext, String url, Map<String, Object> params, Map<String, File> files, User user) throws AppException {
 		// String userName = String.valueOf(params.get("email"));
@@ -260,6 +325,7 @@ public class NgaApi {
 
 		do {
 			try {
+
 				httpClient = getHttpClient();
 				httpPost = getHttpPost(url, cookie, USER_AGENT);
 				httpPost.setRequestEntity(new MultipartRequestEntity(parts, httpPost.getParams()));
@@ -269,7 +335,11 @@ public class NgaApi {
 					httpPost.addRequestHeader("Connection", "close");
 				}
 
+				long start_time = System.nanoTime();
 				int statusCode = httpClient.executeMethod(httpPost);
+				long end_time = System.nanoTime();
+				long parse_time = end_time - start_time;
+				ULog.e("HttpClient executeMethod Time:", " " + parse_time / 1000000.0f + "ms");
 				responseBody = httpPost.getResponseBodyAsString();
 
 				if (ULog.DEBUG) {

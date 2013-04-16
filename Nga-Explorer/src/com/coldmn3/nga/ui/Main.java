@@ -64,14 +64,14 @@ public class Main extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        
+
 		JPushInterface.setDebugMode(true);
 		JPushInterface.init(getApplicationContext());
-		
+
 		setContentView(R.layout.main);
-        
+
 		AbstractWeibo.initSDK(this);
-		
+
 		appContext = (AppContext) getApplication();
 
 		appContext.initSettings();
@@ -88,6 +88,7 @@ public class Main extends BaseActivity {
 			initTopicListView();
 			initTopicListData();
 		}
+		
 	}
 
 	@Override
@@ -147,6 +148,9 @@ public class Main extends BaseActivity {
 				Intent intent = new Intent();
 				intent.setClass(Main.this, TopicDetail.class);
 				String tid = topic.getTid();
+				if (!topic.getQuote_from().equals("0")) {
+					tid = topic.getQuote_from();
+				}
 				int pages = (Integer.valueOf(topic.getReplies()) / 20) + 1;
 				if (!StringUtils.isEmpty(tid)) {
 					intent.putExtra("tid", tid);
@@ -444,23 +448,24 @@ public class Main extends BaseActivity {
 
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-
-		if (requestCode == 1 && resultCode == RESULT_OK) {
-			String search_string = data.getStringExtra("search_string");
-			ULog.e("onActivityResult called", "search_string:" + search_string);
-			try {
-				search_string = URLEncoder.encode(search_string, "GBK");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			lvTopicData.clear();
-			lvTopicAdapter.notifyDataSetChanged();
-			lvTopicFooter.setVisibility(View.GONE);
-			loadTopics("1", "-7", "0", "0", "0", search_string, lvTopicHandler, Constants.LISTVIEW_ACTION_REFRESH);
-		}
-	}
+	// @Override
+	// protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	// super.onActivityResult(requestCode, resultCode, data);
+	//
+	// if (requestCode == 1 && resultCode == RESULT_OK) {
+	// String search_string = data.getStringExtra("search_string");
+	// ULog.e("onActivityResult called", "search_string:" + search_string);
+	// try {
+	// search_string = URLEncoder.encode(search_string, "GBK");
+	// } catch (UnsupportedEncodingException e) {
+	// e.printStackTrace();
+	// }
+	// lvTopicData.clear();
+	// lvTopicAdapter.notifyDataSetChanged();
+	// lvTopicFooter.setVisibility(View.GONE);
+	// loadTopics("1", "-7", "0", "0", "0", search_string, lvTopicHandler,
+	// Constants.LISTVIEW_ACTION_REFRESH);
+	// }
+	// }
 
 }

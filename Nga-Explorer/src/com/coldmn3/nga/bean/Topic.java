@@ -4,7 +4,7 @@ public class Topic extends Entity {
 
 	private String tid;
 	// private String fid;
-	// private String quote_from;
+	private String quote_from;
 	// private String quote_to;
 	// private String icon;
 	// private String titlefont;
@@ -87,6 +87,14 @@ public class Topic extends Entity {
 
 	public void setLocked(String locked) {
 		this.locked = locked;
+	}
+
+	public String getQuote_from() {
+		return quote_from;
+	}
+
+	public void setQuote_from(String quote_from) {
+		this.quote_from = quote_from;
 	}
 
 	@Override

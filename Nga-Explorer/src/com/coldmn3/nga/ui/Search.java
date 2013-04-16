@@ -68,9 +68,9 @@ public class Search extends BaseActivity {
 						return false;
 					}
 					
-					Intent intent = new Intent();
-					intent.putExtra("search_string", search_string);
-					setResult(RESULT_OK, intent);
+					Intent intent = new Intent(Search.this, SimpleList.class);
+					intent.putExtra("title", "搜索结果:" + search_string);
+					startActivity(intent);
 					finish();
 				}
 				return false;

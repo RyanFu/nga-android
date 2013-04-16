@@ -1,7 +1,9 @@
 package com.coldmn3.nga.bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,21 +15,10 @@ import com.coldmn3.nga.app.AppException;
 import com.yulingtech.lycommon.util.ULog;
 
 public class TopicFloorList {
-	private int floorCount;
 
 	private String errorMsg;
 
-	private String quote_from;
-
-	private List<TopicFloor> topicDetailList = new ArrayList<TopicFloor>();
-
-	public String getQuote_from() {
-		return quote_from;
-	}
-
-	public void setQuote_from(String quote_from) {
-		this.quote_from = quote_from;
-	}
+	private List<TopicFloor_> topicDetailList = new ArrayList<TopicFloor_>();
 
 	public String getErrorMsg() {
 		return errorMsg;
@@ -37,19 +28,11 @@ public class TopicFloorList {
 		this.errorMsg = errorMsg;
 	}
 
-	public int getFloorCount() {
-		return floorCount;
-	}
-
-	public void setFloorCount(int floor_count) {
-		this.floorCount = floor_count;
-	}
-
-	public List<TopicFloor> getTopicDetailList() {
+	public List<TopicFloor_> getTopicDetailList() {
 		return topicDetailList;
 	}
 
-	public void setTopicDetailList(List<TopicFloor> topicDetailList) {
+	public void setTopicDetailList(List<TopicFloor_> topicDetailList) {
 		this.topicDetailList = topicDetailList;
 	}
 
@@ -62,16 +45,16 @@ public class TopicFloorList {
 		jsonString = jsonString.replaceAll("\"subject\":(0\\d+),", "\"subject\":\"$1\",");
 		jsonString = jsonString.replaceAll("\"author\":(0\\d+),", "\"author\":\"$1\",");
 
-		final String start = "\"__P\":{\"aid\":";
-		final String end = "\"this_visit_rows\":";
-		if (jsonString.indexOf(start) != -1 && jsonString.indexOf(end) != -1) {
-			String validJs = jsonString.substring(0, jsonString.indexOf(start));
-			validJs += jsonString.substring(jsonString.indexOf(end));
-			jsonString = validJs;
-		}
+		// final String start = "\"__P\":{\"aid\":";
+		// final String end = "\"this_visit_rows\":";
+		// if (jsonString.indexOf(start) != -1 && jsonString.indexOf(end) != -1) {
+		// String validJs = jsonString.substring(0, jsonString.indexOf(start));
+		// validJs += jsonString.substring(jsonString.indexOf(end));
+		// jsonString = validJs;
+		// }
 		TopicFloorList topicDetailList = new TopicFloorList();
-		TopicFloor topicFloor = null;
-		List<TopicFloor> list = new ArrayList<TopicFloor>();
+		TopicFloor_ topicFloor = null;
+		List<TopicFloor_> list = new ArrayList<TopicFloor_>();
 		int j = 0;
 		try {
 
@@ -84,20 +67,7 @@ public class TopicFloorList {
 				return topicDetailList;
 			}
 
-			// 判断是否是镜像帖子
-			JSONObject _TObject = null;
-			if (dataObject.has("__T")) {
-				_TObject = dataObject.getJSONObject("__T");
-				if (_TObject.has("quote_from")) {
-					String quote = _TObject.getString("quote_from");
-					if (!quote.equals("0")) {
-						topicDetailList.setQuote_from(quote);
-						return topicDetailList;
-					}
-				}
-			}
-
-			JSONObject topicsObject = null;
+			JSONObject rowObject = null;
 			if (!dataObject.has("__R")) {
 				String error = dataObject.getString("__MESSAGE");
 				if (error.startsWith("(ERROR:16)")) {
@@ -109,50 +79,69 @@ public class TopicFloorList {
 				}
 				return topicDetailList;
 			} else {
-				topicsObject = dataObject.getJSONObject("__R");
+				rowObject = dataObject.getJSONObject("__R");
+			}
+
+			JSONObject posterObject = null;
+			if (dataObject.has("__U")) {
+				posterObject = dataObject.getJSONObject("__U");
 			}
 
 			int rows = dataObject.getInt("__R__ROWS");
-			for (int i = 0; i < rows; i++) {
-				j = i;
-				if (topicsObject.has(String.valueOf(i))) {
 
-					JSONObject topicObject = (JSONObject) topicsObject.get(String.valueOf(i));
-					topicFloor = new TopicFloor();
-					if (topicObject.has("comment_to_id")) {
-						topicFloor.setAuthor(topicObject.getString("author"));
-						topicFloor.setLou(topicObject.getString("lou"));
-						topicFloor.setPostdate(topicObject.getString("postdate"));
-					} else if (topicObject.has("")) {
+			if (rowObject != null && posterObject != null) {
+				for (int i = 0; i < rows; i++) {
+					j = i;
+					topicFloor = new TopicFloor_();
+					if (rowObject.has(String.valueOf(i))) {
 
+						JSONObject topicObject = (JSONObject) rowObject.get(String.valueOf(i));
+
+						// row...
+						FloorRow floorRow = new FloorRow();
+						if (topicObject.has("comment_to_id")) {
+							floorRow.setSubject(topicObject.getString("subject"));
+							floorRow.setLou("[" + topicObject.getString("lou") + "]楼");
+							floorRow.setPostdate(topicObject.getString("postdate"));
+							floorRow.setAuthorid(topicObject.getString("authorid"));
+						} else {
+							floorRow.setAuthorid(topicObject.getString("authorid"));
+							floorRow.setPostdate(topicObject.getString("postdate"));
+							floorRow.setLou("[" + topicObject.getString("lou") + "]楼");
+							floorRow.setSubject(topicObject.getString("subject"));
+							floorRow.setContent(NgaUtils.parseContent(topicObject.getString("content")));
+							floorRow.setAlterinfo(topicObject.getString("alterinfo"));
+						}
+
+						// author...
+						Poster poster = new Poster();
+						JSONObject userObject = posterObject.getJSONObject(floorRow.getAuthorid());
+						if (userObject != null) {
+							poster.setUid(userObject.getString("uid"));
+							poster.setUsername(userObject.getString("username"));
+							poster.setCredit(userObject.getString("credit"));
+							poster.setAvatar(NgaUtils.parseAvatarUrl(userObject.getString("avatar")));
+							poster.setYz(userObject.getString("yz"));
+							float rvrc = userObject.getInt("rvrc");
+							rvrc = rvrc / 10.0f;
+							poster.setRvrc(String.valueOf(rvrc));// 威望
+							poster.setPostnum(userObject.getString("postnum"));
+						}
+
+						topicFloor.setPoster(poster);
+						topicFloor.setRow(floorRow);
+
+						list.add(topicFloor);
+
+						// ULog.d("TopicList Parse: ", "topic:" + i + " " + topic.toString());
 					} else {
-						topicFloor.setAuthor(topicObject.getString("author"));
-						topicFloor.setContent(NgaUtils.parseContent(topicObject.getString("content")));
-						topicFloor.setPostdate(topicObject.getString("postdate"));
-						topicFloor.setPostnum(topicObject.getString("postnum"));
-						topicFloor.setAurvrc(topicObject.getString("aurvrc"));
-						topicFloor.setLou(topicObject.getString("lou"));
-						ULog.i("unparse url:", topicFloor.getLou() + " " + topicObject.getString("js_escap_avatar"));
-						topicFloor.setJs_escap_avatar(NgaUtils.parseAvatarUrl(topicObject.getString("js_escap_avatar")));
-						ULog.i("avatar url:", topicFloor.getLou() + " " + topicFloor.getJs_escap_avatar());
+						ULog.e("TopicList", "topic:" + i + " null!");
+						list.add(topicFloor);
 					}
 
-					list.add(topicFloor);
-
-					// ULog.d("TopicList Parse: ", "topic:" + i + " " + topic.toString());
-				} else {
-					ULog.e("TopicList", "topic:" + i + " null!");
-					topicFloor.setAuthor("");
-					topicFloor.setContent("<i>楼层解析错误</i>");
-					topicFloor.setPostdate("");
-					topicFloor.setPostnum("");
-					topicFloor.setAurvrc("");
-					topicFloor.setLou("");
-					topicFloor.setJs_escap_avatar("");
-					list.add(topicFloor);
 				}
-
 			}
+
 			topicDetailList.setTopicDetailList(list);
 			return topicDetailList;
 

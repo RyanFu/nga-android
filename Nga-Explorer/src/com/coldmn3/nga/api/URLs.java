@@ -1,7 +1,7 @@
 package com.coldmn3.nga.api;
 
 public class URLs {
-	public final static String JSON_NOPREFIX = "&lite=js&noprefix";
+	public final static String JSON_NOPREFIX = "&lite=js&noprefix&v2";
 
 	public final static String LOGIN_VALIDATE = "http://account.178.com/q_account.php?_act=login";
 

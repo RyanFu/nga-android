@@ -17,8 +17,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebSettings;
-import android.webkit.WebSettings.LayoutAlgorithm;
-import android.webkit.WebSettings.RenderPriority;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -30,6 +28,7 @@ import com.coldmn3.nga.api.NgaApi;
 import com.coldmn3.nga.app.AppContext;
 import com.coldmn3.nga.app.AppException;
 import com.coldmn3.nga.bean.TopicFloor;
+import com.coldmn3.nga.bean.TopicFloor_;
 import com.yulingtech.lycommon.util.AsyncImageDownload;
 import com.yulingtech.lycommon.util.BitmapManager;
 import com.yulingtech.lycommon.util.StringUtils;
@@ -38,7 +37,7 @@ import com.yulingtech.lycommon.util.ULog;
 public class ListViewTopicDetailAdapter extends BaseAdapter {
 
 	private LayoutInflater inflater;
-	private List<TopicFloor> listData;
+	private List<TopicFloor_> listData;
 	private Context mContext = null;
 	private AppContext appContext;
 
@@ -62,7 +61,7 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 		public TextView postnum;
 	}
 
-	public ListViewTopicDetailAdapter(Context context, List<TopicFloor> data) {
+	public ListViewTopicDetailAdapter(Context context, List<TopicFloor_> data) {
 		mContext = context;
 		inflater = LayoutInflater.from(context);
 		density = mContext.getResources().getDisplayMetrics().density;
@@ -163,7 +162,7 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 		// }
 		// }
 
-		TopicFloor detail = listData.get(position);
+		TopicFloor_ detail = listData.get(position);
 
 		// 根据设置和网络环境 是否加载头像s
 		int picOp = appContext.getFloorPictureOption();
@@ -174,15 +173,15 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 			net = false;
 		}
 
-		handleContent(viewHolder.content, detail.getContent(), !net);
+		handleContent(viewHolder.content, detail.getRow().getContent(), !net);
 
-		handleAvatar(viewHolder, detail.getJs_escap_avatar(), net); // 头像
+		handleAvatar(viewHolder, detail.getPoster().getAvatar(), net); // 头像
 
-		viewHolder.author.setText(detail.getAuthor());
-		viewHolder.floor.setText("[" + detail.getLou() + "楼]");
-		viewHolder.postdate.setText(detail.getPostdate());
-		viewHolder.aurvrc.setText("威望:" + detail.getAurvrc());
-		viewHolder.postnum.setText("发帖:" + detail.getPostnum());
+		viewHolder.author.setText(detail.getPoster().getUsername());
+		viewHolder.floor.setText(detail.getRow().getLou());
+		viewHolder.postdate.setText(detail.getRow().getPostdate());
+		viewHolder.aurvrc.setText("威望:" + detail.getPoster().getRvrc());
+		viewHolder.postnum.setText("发帖:" + detail.getPoster().getPostnum());
 
 		View left = convertView.findViewById(R.id.floor_left);
 		left.setOnTouchListener(new OnTouchListener() {

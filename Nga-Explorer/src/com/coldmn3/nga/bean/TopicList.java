@@ -45,8 +45,8 @@ public class TopicList extends Entity {
 
 	public static TopicList parse(String jsonString) throws AppException {
 
-//		jsonString = jsonString.replaceAll("\"content\":\\+(\\d+),", "\"content\":\"+$1\",");
-//		jsonString = jsonString.replaceAll("\"subject\":\\+(\\d+),", "\"subject\":\"+$1\",");
+		// jsonString = jsonString.replaceAll("\"content\":\\+(\\d+),", "\"content\":\"+$1\",");
+		// jsonString = jsonString.replaceAll("\"subject\":\\+(\\d+),", "\"subject\":\"+$1\",");
 
 		TopicList topicList = new TopicList();
 
@@ -73,7 +73,7 @@ public class TopicList extends Entity {
 			}
 			int rows = dataObject.getInt("__T__ROWS");
 			for (int i = 0; i < rows; i++) {
-                
+
 				if (topicsObject.has(String.valueOf(i))) {
 					JSONObject topicObject = (JSONObject) topicsObject.get(String.valueOf(i));
 					topic = new Topic();
@@ -85,9 +85,10 @@ public class TopicList extends Entity {
 					topic.setReplies(topicObject.getString("replies"));
 					topic.setSubject(topicObject.getString("subject"));
 					topic.setTid(topicObject.getString("tid"));
+					topic.setQuote_from(topicObject.getString("quote_from"));
 					list.add(topic);
 
-//					ULog.d("TopicList Parse: ", "topic:" + i + " " + topic.toString());
+					// ULog.d("TopicList Parse: ", "topic:" + i + " " + topic.toString());
 				} else {
 					ULog.e("TopicList", "topic:" + i + " null!");
 					topic = new Topic();
@@ -101,7 +102,7 @@ public class TopicList extends Entity {
 					topic.setTid("");
 					list.add(topic);
 				}
-                
+
 			}
 			topicList.setTopicList(list);
 			return topicList;
