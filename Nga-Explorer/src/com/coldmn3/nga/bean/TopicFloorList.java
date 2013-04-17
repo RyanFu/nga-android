@@ -126,6 +126,11 @@ public class TopicFloorList {
 							rvrc = rvrc / 10.0f;
 							poster.setRvrc(String.valueOf(rvrc));// 威望
 							poster.setPostnum(userObject.getString("postnum"));
+							poster.setGroupid(userObject.getString("groupid"));
+							poster.setThisvisit(userObject.getString("thisvisit"));
+							poster.setRegdate(userObject.getString("regdate"));
+							poster.setMoney(userObject.getString("money"));
+					
 						}
 
 						topicFloor.setPoster(poster);

@@ -75,6 +75,9 @@
         <activity
             android:name="com.coldmn3.nga.ui.SimpleList"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.coldmn3.nga.ui.UserInfo"
+            android:screenOrientation="portrait" />
         <!-- JPush -->
         <!-- Required SDK核心功能 -->
         <activity

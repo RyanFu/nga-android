@@ -6,8 +6,8 @@
     android:background="#ffeeeeee"
     android:orientation="vertical" >
 
-    <include layout="@layout/title"/>
-    
+    <include layout="@layout/title" />
+
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
@@ -51,7 +51,7 @@
                         android:layout_height="wrap_content" >
 
                         <TextView
-                            android:id="@+id/name"
+                            android:id="@+id/user_id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.0"
@@ -59,13 +59,14 @@
                             android:textColor="#ff262626"
                             android:textSize="16.0sp" />
 
-                        <ImageView
-                            android:id="@+id/sex"
+                        <TextView
+                            android:id="@+id/user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8.0dip"
-                            android:layout_marginTop="4.0dip"
-                            android:layout_weight="0.0" />
+                            android:layout_weight="1.0"
+                            android:singleLine="true"
+                            android:textColor="#ff262626"
+                            android:textSize="16.0sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -87,12 +88,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true" >
-
-                    <Button
-                        android:id="@+id/change"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="0.0dip" />
 
                     <LinearLayout
                         android:id="@+id/attention"
@@ -154,19 +149,18 @@
 
                             <LinearLayout
                                 android:id="@+id/button_likes"
-                                android:clickable="true"
-                                style="@style/personal_big_button" >
+                                style="@style/personal_big_button"
+                                android:clickable="true" >
 
                                 <ImageView
                                     android:id="@+id/likes_image"
-                                    android:background="@drawable/person_likes"
-                                    style="@style/personal_big_button_icon" />
+                                    style="@style/personal_big_button_icon"
+                                    android:background="@drawable/person_likes" />
 
                                 <TextView
                                     android:id="@+id/likes_text"
-                                    android:text="我喜欢的"
-                                    style="@style/personal_big_button_text" />
-
+                                    style="@style/personal_big_button_text"
+                                    android:text="我喜欢的" />
                             </LinearLayout>
                         </RelativeLayout>
 
@@ -178,14 +172,13 @@
 
                                 <ImageView
                                     android:id="@+id/attention_image"
-                                    android:background="@drawable/person_fans"
-                                    style="@style/personal_big_button_icon" />
+                                    style="@style/personal_big_button_icon"
+                                    android:background="@drawable/person_fans" />
 
                                 <TextView
                                     android:id="@+id/my_attention_text"
-                                    android:text="收藏的帖子"
-                                    style="@style/personal_big_button_text" />
-
+                                    style="@style/personal_big_button_text"
+                                    android:text="收藏的帖子" />
                             </LinearLayout>
                         </RelativeLayout>
 
@@ -197,15 +190,14 @@
 
                                 <ImageView
                                     android:id="@+id/fans_image"
-                                    android:background="@drawable/person_mention"
-                                    style="@style/personal_big_button_icon" />
+                                    style="@style/personal_big_button_icon"
+                                    android:background="@drawable/person_mention" />
 
                                 <TextView
                                     android:id="@+id/fans_text"
-                                    android:text="最近浏览"
-                                    style="@style/personal_big_button_text" />
+                                    style="@style/personal_big_button_text"
+                                    android:text="最近浏览" />
                             </LinearLayout>
-
                         </RelativeLayout>
                     </LinearLayout>
 
@@ -282,11 +274,10 @@
 
                             <LinearLayout
                                 android:id="@+id/button_lbs"
-                                android:clickable="true"
                                 android:layout_width="match_parent"
                                 android:layout_height="92dp"
-                                android:background="@drawable/home_search_clean_on" >
-
+                                android:background="@drawable/home_search_clean_on"
+                                android:clickable="true" >
                             </LinearLayout>
                         </LinearLayout>
 

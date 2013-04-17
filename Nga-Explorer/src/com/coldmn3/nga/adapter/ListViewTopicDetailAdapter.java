@@ -5,9 +5,11 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,8 +29,9 @@ import com.coldmn3.nga.R;
 import com.coldmn3.nga.api.NgaApi;
 import com.coldmn3.nga.app.AppContext;
 import com.coldmn3.nga.app.AppException;
-import com.coldmn3.nga.bean.TopicFloor;
 import com.coldmn3.nga.bean.TopicFloor_;
+import com.coldmn3.nga.ui.Center;
+import com.coldmn3.nga.ui.UserInfo;
 import com.yulingtech.lycommon.util.AsyncImageDownload;
 import com.yulingtech.lycommon.util.BitmapManager;
 import com.yulingtech.lycommon.util.StringUtils;
@@ -162,7 +165,7 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 		// }
 		// }
 
-		TopicFloor_ detail = listData.get(position);
+		final TopicFloor_ detail = listData.get(position);
 
 		// 根据设置和网络环境 是否加载头像s
 		int picOp = appContext.getFloorPictureOption();
@@ -200,9 +203,11 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 					// popupWindow.setAnimationStyle(R.style.popupFade);
 					popupWindow.update();
 					popupWindow.setBackgroundDrawable(new BitmapDrawable(mContext.getResources()));
-					ULog.d("popupwindow height", "" + popupWindow.getHeight());
-
 					popupWindow.showAtLocation(v, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, (int) (touchY - 56 * density));
+
+					View checkUser = popupContainer.findViewById(R.id.check_user);
+
+					checkUser.setOnClickListener(new PopupListener(1, detail));
 				}
 				return false;
 			}
@@ -242,7 +247,8 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 				// viewHolder.avatar.setVisibility(View.GONE);
 			}
 		} else {
-			viewHolder.avatar.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.default_trans));
+//			viewHolder.avatar.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.default_trans));
+			viewHolder.avatar.setVisibility(View.GONE);
 		}
 	}
 
@@ -259,5 +265,33 @@ public class ListViewTopicDetailAdapter extends BaseAdapter {
 		setting.setJavaScriptEnabled(false);
 
 		view.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
+	}
+
+	private static class PopupListener implements View.OnClickListener {
+
+		private int index;
+		private TopicFloor_ floor;
+
+		public PopupListener(int i, TopicFloor_ floor) {
+			this.index = i;
+			this.floor = floor;
+		}
+
+		@Override
+		public void onClick(View v) {
+			switch (index) {
+			case 1:
+				Intent intent = new Intent(v.getContext(), UserInfo.class);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable("floor", this.floor);
+				intent.putExtras(bundle);
+				v.getContext().startActivity(intent);
+				break;
+
+			default:
+				break;
+			}
+		}
+
 	}
 }
